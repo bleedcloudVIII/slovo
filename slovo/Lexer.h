@@ -12,7 +12,8 @@ class Lexer
 	std::vector<Token> tokenList;
 public:
 	Lexer(std::string);
-
+	
+	std::vector<Token> getTokenList();
 	std::vector<Token>& lexAnalysis();
 	bool nextToken();
 };

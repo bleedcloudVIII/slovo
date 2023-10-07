@@ -10,6 +10,6 @@ class Token
 
 public:
 	Token(TokenType&, std::string, int);
-
+	std::string getText();
 };
 

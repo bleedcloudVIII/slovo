@@ -1,6 +1,7 @@
 #pragma once
 #include <string>
 #include <vector>
+#include <unordered_map>
 
 class TokenType
 {
@@ -8,13 +9,15 @@ class TokenType
 	std::string regex;
 
 public:
+	std::string getRegex();
+	std::string getName();
 	TokenType(std::string, std::string);
 };
 
-struct TokenTypeList {
-	std::string name;
-	TokenType tokenType
-};
+//struct TokenTypeList {
+//	std::string name;
+//	TokenType tokenType
+//};
 
 //std::vector<TokenTypeList> tokenTypeList{
 //	{"NUMBER", new TokenType("NUMBER", "[0-9]]*")},
@@ -29,4 +32,5 @@ struct TokenTypeList {
 //	{"RPAR", new TokenType("RPAR", "\\)")},
 //};
 
-extern std::vector<TokenType> TokenTypeList;
+extern std::unordered_map<std::string, TokenType*> TokenTypeList;
+//extern std::vector<TokenType*> TokenTypeList;
