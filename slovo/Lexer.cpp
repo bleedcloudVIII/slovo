@@ -1,5 +1,6 @@
 #include "Lexer.h"
 
+
 std::vector<TokenType*> TokenTypeList = {
 	new TokenType("NUMBER", "[0-9]]*"),
 	new TokenType("VARIABLE", "[a-z]]*"),
