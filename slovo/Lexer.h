@@ -4,17 +4,21 @@
 #include "TokenType.h"
 #include <string>
 #include <vector>
+//#include <unordered_map>
 
 class Lexer
 {
-	std::string code;
-	int pos = 0;
-	std::vector<Token> tokenList;
 public:
 	Lexer(std::string);
-	
+	Lexer(const Lexer&);
+	Lexer();
+
+	std::string _code;
+	int _pos = 0;
+	std::vector<Token> _tokenList;
+
 	std::vector<Token> getTokenList();
-	std::vector<Token>& lexAnalysis();
+	std::vector<Token> lexAnalysis();
 	bool nextToken();
 };
 

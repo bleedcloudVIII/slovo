@@ -1,13 +1,13 @@
 #include "TokenType.h"
 
-TokenType::TokenType(std::string n, std::string r): name(n), regex(r) {};
+TokenType::TokenType(std::string n, std::string r): _name(n), _regex(r) {};
 
 std::string TokenType::getRegex()
 {
-	return regex;
+	return _regex;
 }
 
 std::string TokenType::getName()
 {
-	return name;
+	return _name;
 }
