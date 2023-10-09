@@ -34,6 +34,6 @@ public:
 //	{"RPAR", new TokenType("RPAR", "\\)")},
 //};
 
-//extern std::map<std::string, TokenType*> TokenTypeList;
-extern std::vector<TokenType*> TokenTypeList;
+extern std::unordered_map<std::string, TokenType*> TokenTypeList;
+//extern std::vector<TokenType*> TokenTypeList;
 //extern std::vector<TokenType*> TokenTypeList;

@@ -2,31 +2,31 @@
 #include <regex>
 #include <iostream>
 //
-//std::map<std::string, TokenType*>  TokenTypeList = {
-//	{"VARIABLE", new TokenType("VARIABLE", "[a-z]*")},
-//	{"ASSIGN", new TokenType("ASSIGN", "=")},
-//	{"NUMBER", new TokenType("NUMBER", "[0-9]*")},
-//	{"SEMICOLON", new TokenType("SEMICOLON", ";")},
-//	{"SPACE", new TokenType("SPACE", "\\n\\t\\r")},
-//	{"LOG", new TokenType("LOG", "log")},
-//	{"PLUS", new TokenType("PLUS", "+")},
-//	{"MINUS", new TokenType("MINUS", "-")},
-//	{"LPAR", new TokenType("LPAR", "\\(")},
-//	{"RPAR", new TokenType("RPAR", "\\)")}
-//};
-
-std::vector<TokenType*>  TokenTypeList = {
-	new TokenType("VARIABLE", "[a-z]*"),
-	new TokenType("ASSIGN", "\\="),
-	new TokenType("NUMBER", "[0-9]*"),
-	new TokenType("SEMICOLON", "\\;"),
-	new TokenType("SPACE", "[ \\n\\t\\r\\s]"),
-	new TokenType("LOG", "log"),
-	new TokenType("PLUS", "\\+"),
-	new TokenType("MINUS", "\\-"),
-	new TokenType("LPAR", "\\("),
-	new TokenType("RPAR", "\\)")
+std::unordered_map<std::string, TokenType*>  TokenTypeList = {
+	{"VARIABLE", new TokenType("VARIABLE", "[a-z]*")},
+	{"ASSIGN", new TokenType("ASSIGN", "\\=")},
+	{"NUMBER", new TokenType("NUMBER", "[0-9]*")},
+	{"SEMICOLON", new TokenType("SEMICOLON", "\\;")},
+	{"SPACE", new TokenType("SPACE", "[ \\n\\t\\r\\s]")},
+	{"LOG", new TokenType("LOG", "log")},
+	{"PLUS", new TokenType("PLUS", "\\+")},
+	{"MINUS", new TokenType("MINUS", "\\-")},
+	{"LPAR", new TokenType("LPAR", "\\(")},
+	{"RPAR", new TokenType("RPAR", "\\)")}
 };
+
+//std::vector<TokenType*>  TokenTypeList = {
+//	new TokenType("VARIABLE", "[a-z]*"),
+//	new TokenType("ASSIGN", "\\="),
+//	new TokenType("NUMBER", "[0-9]*"),
+//	new TokenType("SEMICOLON", "\\;"),
+//	new TokenType("SPACE", "[ \\n\\t\\r\\s]"),
+//	new TokenType("LOG", "log"),
+//	new TokenType("PLUS", "\\+"),
+//	new TokenType("MINUS", "\\-"),
+//	new TokenType("LPAR", "\\("),
+//	new TokenType("RPAR", "\\)")
+//};
 
 Lexer::Lexer(std::string c) : _code(c) {};
 
@@ -47,7 +47,7 @@ std::vector<TokenType*> _getValues()
 	{
 		//std::cout << e.second->getName() << std::endl;
 		//v.push_back(TokenTypeList)
-		v.push_back(e);
+		v.push_back(e.second);
 	}
 	//for (int i = 0; i < v.size(); i++)
 	//{
@@ -61,17 +61,17 @@ std::vector<TokenType*> _getValues()
 std::vector<Token> Lexer::lexAnalysis()
 {
 	while (this->nextToken()) {}
-	//for (int i = 0; i < _tokenList.size(); i++)
-	//{
-	//	std::string typeOfToken = _tokenList[i]._type._name;
-	//	std::vector<int> deleteIndex;
-		//if (_tokenList[i]._type._name == "[ \\n\\t\\r\\s]")
-		//{
-			//_tokenList.erase(_tokenList.begin() + i);
-			//deleteIndex.push_back(i);
-			//i--;
-		//}
-	//}
+	for (int i = 0; i < _tokenList.size(); i++)
+	{
+		std::string typeOfToken = _tokenList[i]._type._name;
+		std::vector<int> deleteIndex;
+		if (_tokenList[i]._type._name == TokenTypeList["SPACE"]->_name)
+		{
+			_tokenList.erase(_tokenList.begin() + i);
+			deleteIndex.push_back(i);
+			i--;
+		}
+	}
 	return _tokenList;
 };
 
@@ -79,11 +79,12 @@ bool Lexer::nextToken()
 {
 	if (this->_pos >= this->_code.length()) return false;
 	const std::vector<TokenType*> tokenTypesValues = _getValues();
-	//for (int i = 0; i < tokenTypesValues.size(); i++)
-	//{
-	//	std::cout << tokenTypesValues[i]->_regex << std::endl;
-	//}
-	//std::cout << "---------------------------------" << std::endl;
+	std::cout << "---------------------------------" << std::endl;
+	for (int i = 0; i < tokenTypesValues.size(); i++)
+	{
+		std::cout << tokenTypesValues[i]->_regex << std::endl;
+	}
+	std::cout << "---------------------------------" << std::endl;
 	std::cout << _code << std::endl;
 	for (int i = 0; i < tokenTypesValues.size(); i++)
 	{
