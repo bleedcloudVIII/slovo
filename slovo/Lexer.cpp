@@ -17,13 +17,13 @@
 
 std::vector<TokenType*>  TokenTypeList = {
 	new TokenType("VARIABLE", "[a-z]*"),
-	new TokenType("ASSIGN", "="),
+	new TokenType("ASSIGN", "\\="),
 	new TokenType("NUMBER", "[0-9]*"),
-	new TokenType("SEMICOLON", ";"),
-	new TokenType("SPACE", "[ \\n\\t\\r]"),
+	new TokenType("SEMICOLON", "\\;"),
+	new TokenType("SPACE", "[ \\n\\t\\r\\s]"),
 	new TokenType("LOG", "log"),
-	new TokenType("PLUS", "+"),
-	new TokenType("MINUS", "-"),
+	new TokenType("PLUS", "\\+"),
+	new TokenType("MINUS", "\\-"),
 	new TokenType("LPAR", "\\("),
 	new TokenType("RPAR", "\\)")
 };
@@ -61,17 +61,17 @@ std::vector<TokenType*> _getValues()
 std::vector<Token> Lexer::lexAnalysis()
 {
 	while (this->nextToken()) {}
-	for (int i = 0; i < _tokenList.size(); i++)
-	{
-		std::string typeOfToken = _tokenList[i]._type._name;
-		std::vector<int> deleteIndex;
-		if (_tokenList[i]._type._name == "[ \\n\\t\\r]")
-		{
+	//for (int i = 0; i < _tokenList.size(); i++)
+	//{
+	//	std::string typeOfToken = _tokenList[i]._type._name;
+	//	std::vector<int> deleteIndex;
+		//if (_tokenList[i]._type._name == "[ \\n\\t\\r\\s]")
+		//{
 			//_tokenList.erase(_tokenList.begin() + i);
-			deleteIndex.push_back(i);
-			i--;
-		}
-	}
+			//deleteIndex.push_back(i);
+			//i--;
+		//}
+	//}
 	return _tokenList;
 };
 
@@ -84,6 +84,7 @@ bool Lexer::nextToken()
 	//	std::cout << tokenTypesValues[i]->_regex << std::endl;
 	//}
 	//std::cout << "---------------------------------" << std::endl;
+	std::cout << _code << std::endl;
 	for (int i = 0; i < tokenTypesValues.size(); i++)
 	{
 		//std::cout << "index: " << i << std::endl;
@@ -97,8 +98,9 @@ bool Lexer::nextToken()
 		std::string result = match_result.str();
 		if (match_result.length() > 0)
 		{	
-			//std::cout << "MATCH" << std::endl;
-			//std::cout << result[0] << std::endl;
+			std::cout << _pos << std::endl;
+			std::cout << "MATCH" << std::endl;
+			std::cout << result << std::endl;
 			Token token(*tokenType, result, _pos);
 			_pos += result.length();
 			_tokenList.push_back(token);
