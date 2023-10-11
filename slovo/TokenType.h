@@ -2,7 +2,6 @@
 #include <string>
 #include <vector>
 #include <unordered_map>
-#include <map>
 
 class TokenType
 {
@@ -10,6 +9,7 @@ class TokenType
 public:
 	std::string _name;
 	std::string _regex;
+
 	TokenType(std::string, std::string);
 };
 
