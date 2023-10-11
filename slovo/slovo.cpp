@@ -6,7 +6,13 @@
 int main()
 {
     std::ifstream file("main.slovo");
-    std::string code = "a = 5 + 9;";
+    std::string code, a;
+    while (file)
+    {
+        file >> a;
+        code += a;
+    }
+    //std::string code = "a = 5 + 9; \n b = (a - 2) + 7; \n log \n";
     
 
     Lexer* lexer = new Lexer(code);

@@ -7,7 +7,7 @@ std::unordered_map<std::string, TokenType*>  TokenTypeList = {
 	{"ASSIGN", new TokenType("ASSIGN", "\\=")},
 	{"NUMBER", new TokenType("NUMBER", "[0-9]*")},
 	{"SEMICOLON", new TokenType("SEMICOLON", "\\;")},
-	{"SPACE", new TokenType("SPACE", "[ \\n\\t\\r\\s]")},
+	{"SPACE", new TokenType("SPACE", "[ \\n \\t \\r \\s]")},
 	{"LOG", new TokenType("LOG", "log")},
 	{"PLUS", new TokenType("PLUS", "\\+")},
 	{"MINUS", new TokenType("MINUS", "\\-")},

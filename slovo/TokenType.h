@@ -10,9 +10,6 @@ class TokenType
 public:
 	std::string _name;
 	std::string _regex;
-
-	std::string getRegex();
-	std::string getName();
 	TokenType(std::string, std::string);
 };
 
