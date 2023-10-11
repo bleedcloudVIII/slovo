@@ -6,13 +6,15 @@ class Token
 {
 
 public:
-	TokenType& _type;
+	TokenType _type;
 	std::string _text;
 	int _pos;
 
 	Token(TokenType&, std::string, int);
 	Token(const Token&);
+	Token();
 
+	//void operator =(Token);
 
 	std::string getText();
 };

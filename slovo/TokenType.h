@@ -11,6 +11,7 @@ public:
 	std::string _regex;
 
 	TokenType(std::string, std::string);
+	TokenType();
 };
 
 extern std::unordered_map<std::string, TokenType*> TokenTypeList;
