@@ -3,25 +3,30 @@
 #include <string>
 #include "Lexer.h"
 #include "Token.h"
+
+const int maxlength = INT_MAX;
+
 int main()
 {
     std::ifstream file("main.slovo");
-    std::string code, a;
-    while (file)
+    std::string code;
+
+    char* line = new char[maxlength];
+    while (file.getline(line, maxlength))
     {
-        file >> a;
-        code += a;
+        code += line;
     }
-    //std::string code = "a = 5 + 9; \n b = (a - 2) + 7; \n log \n";
-    
 
     Lexer* lexer = new Lexer(code);
     //lexer->lexAnalysis();
     std::vector<Token> tokenList = lexer->lexAnalysis();
-    int size = tokenList.size();
 
     for (int i = 0; i < tokenList.size(); i++)
     {
         std::cout << tokenList[i]._text << std::endl;
     }
+    std::cout << "----------------" << std::endl;
+
+    int b;
+    std::cin >> b;
 }

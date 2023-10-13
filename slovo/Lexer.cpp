@@ -42,7 +42,7 @@ std::vector<Token> Lexer::lexAnalysis()
 	std::vector<Token> tokenListWithoutSpace;
 	for (int i = 0; i < _tokenList.size(); i++)
 		if (_tokenList[i]._type._name != "SPACE") tokenListWithoutSpace.push_back(_tokenList[i]);
-	
+
 	return tokenListWithoutSpace;
 };
 
