@@ -118,3 +118,8 @@ std::variant<BinOperationNode*, std::variant<NumberNode*, VariableNode*>> Parser
 	}
 	return root;
 };
+
+ void Parser::run(StatementsNode* node)
+ {
+	 
+ }

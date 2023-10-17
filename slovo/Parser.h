@@ -28,7 +28,7 @@ public:
 	StatementsNode* _parseCode();
 	std::variant<BinOperationNode*, std::variant<NumberNode*, VariableNode*>> _parseFormula();
 	std::variant<BinOperationNode*, std::variant<NumberNode*, VariableNode*>> _parseParenthese();
-	UnarOperationNode* _parsePrint()
-
+	UnarOperationNode* _parsePrint();
+	void run(StatementsNode* node);
 };
 

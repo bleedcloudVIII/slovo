@@ -25,6 +25,7 @@ int main()
     {
         std::cout << tokenList[i]._text << std::endl;
     }
-    std::cout << "----------------" << std::endl;
+    std::cout << "----------------" << std::endl;   
+    
 
 }
