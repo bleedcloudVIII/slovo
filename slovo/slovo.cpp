@@ -27,6 +27,4 @@ int main()
     }
     std::cout << "----------------" << std::endl;
 
-    int b;
-    std::cin >> b;
 }

@@ -1,11 +1,10 @@
 #pragma once
-#include "Token.h"
+#include "../Token.h"
 
 class NumberNode
 {
 public:
 	Token _number;
-
 	NumberNode(Token);
 };
 

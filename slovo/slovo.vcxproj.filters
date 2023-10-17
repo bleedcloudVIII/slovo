@@ -36,10 +36,10 @@
     <ClCompile Include="AST\StatementsNode.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
-    <ClCompile Include="VariableNode.cpp">
+    <ClCompile Include="AST\VariableNode.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
-    <ClCompile Include="NumberNode.cpp">
+    <ClCompile Include="AST\NumberNode.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
   </ItemGroup>
@@ -62,10 +62,10 @@
     <ClInclude Include="AST\StatementsNode.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
-    <ClInclude Include="VariableNode.h">
+    <ClInclude Include="AST\VariableNode.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
-    <ClInclude Include="NumberNode.h">
+    <ClInclude Include="AST\NumberNode.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
   </ItemGroup>

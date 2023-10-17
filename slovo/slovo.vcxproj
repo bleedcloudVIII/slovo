@@ -130,24 +130,24 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="AST\ExpressionNode.cpp" />
+    <ClCompile Include="AST\NumberNode.cpp" />
     <ClCompile Include="AST\StatementsNode.cpp" />
+    <ClCompile Include="AST\VariableNode.cpp" />
     <ClCompile Include="Lexer.cpp" />
-    <ClCompile Include="NumberNode.cpp" />
     <ClCompile Include="Parser.cpp" />
     <ClCompile Include="slovo.cpp" />
     <ClCompile Include="Token.cpp" />
     <ClCompile Include="TokenType.cpp" />
-    <ClCompile Include="VariableNode.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AST\ExpressionNode.h" />
+    <ClInclude Include="AST\NumberNode.h" />
     <ClInclude Include="AST\StatementsNode.h" />
+    <ClInclude Include="AST\VariableNode.h" />
     <ClInclude Include="Lexer.h" />
-    <ClInclude Include="NumberNode.h" />
     <ClInclude Include="Parser.h" />
     <ClInclude Include="Token.h" />
     <ClInclude Include="TokenType.h" />
-    <ClInclude Include="VariableNode.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
