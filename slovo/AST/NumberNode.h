@@ -5,6 +5,7 @@ class NumberNode
 {
 public:
 	Token _number;
+
 	NumberNode(Token);
 };
 

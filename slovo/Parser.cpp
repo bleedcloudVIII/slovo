@@ -37,9 +37,9 @@ Token Parser::_require(std::vector<TokenType> expected)
 std::variant<NumberNode*, VariableNode*> Parser::_parseVariableOrNumber()
 {
 	const std::variant<Token, int> number = _match({ *TokenTypeList["NUMBER"] });
-	if (number.index() != 1) return new NumberNode(number);
+	if (number.index() != 1) return new NumberNode(std::get<Token>(number));
 	const std::variant<Token, int> variable = _match({ *TokenTypeList["VARIABLE"] });
-	if (variable.index() != 1) return new VariableNode(variable);
+	if (variable.index() != 1) return new VariableNode(std::get<Token>(variable));
 	std::cout << "Ошибка. Ожидалось или число, или переменная." << std::endl;
 	throw "ERROR";
 
@@ -59,6 +59,17 @@ std::variant<BinOperationNode*, std::variant<NumberNode*, VariableNode*>> Parser
 	}
 }
 
+UnarOperationNode* Parser::_parsePrint()
+{
+	std::variant<Token, int> t = _match({ *TokenTypeList["LOG"]});
+	if (t.index() != 1)
+	{
+		return new UnarOperationNode(std::get<Token>(t), _parseFormula());
+	}
+	std::cout << "ERROR." << std::endl;
+	throw "Ожидается унарный опепатор log";
+};
+
 std::variant<BinOperationNode*, std::variant<NumberNode*, VariableNode*>> Parser::_parseFormula()
 {
 	std::variant<BinOperationNode*, std::variant<NumberNode*, VariableNode*>> leftNode = _parseParenthese();
@@ -72,14 +83,14 @@ std::variant<BinOperationNode*, std::variant<NumberNode*, VariableNode*>> Parser
 	return leftNode;
 }
 
-ExpressionNode Parser::_parseExpression()
+ std::variant<UnarOperationNode*, BinOperationNode*> Parser::_parseExpression()
 {
 	//std::vector<TokenType> v{ *TokenTypeList["VARIABLE"] };
 	const std::variant<Token, int> m = _match({ *TokenTypeList["VARIABLE"]});
 	if (m.index() == 1)
 	{
 		// Если не переменная, то ожидаем консоль(log)
-		const printNode = _parsePrint();
+		UnarOperationNode* printNode = _parsePrint();
 		return printNode;
 	}
 	_pos -= 1; // Возвращаем обратно позицию, т.к. в _match() делали + 1
@@ -87,20 +98,20 @@ ExpressionNode Parser::_parseExpression()
 	const std::variant<Token, int> assignOperator = _match({ *TokenTypeList["ASSIGN"] });
 	if (assignOperator.index() != 1)
 	{
-		const rightFormulaNode = _parseFormula();
-		const BinOperationNode* binaryNode = new BinOperationNode(std::get<Token>(assignOperator), variableNode, rightFormulaNode);
+		const std::variant<BinOperationNode*, std::variant<NumberNode*, VariableNode*>> rightFormulaNode = _parseFormula();
+		BinOperationNode* binaryNode = new BinOperationNode(std::get<Token>(assignOperator), variableNode, std::get<std::variant<NumberNode*, VariableNode*>>(rightFormulaNode));
 		return binaryNode;
 	}
 	std::cout << "Ошибка. После переменной ожидается оператор присвоения." << std::endl;
 	throw "ERROR";
 };
 
-StatementsNode Parser::_parseCode()
+ StatementsNode* Parser::_parseCode()
 {
 	StatementsNode* root = new StatementsNode();
 	while (_pos < _tokens.size())
 	{
-		const ExpressionNode codeStringNode = _parseExpression();
+		const std::variant<UnarOperationNode*, BinOperationNode*> codeStringNode = _parseExpression();
 		//std::vector<TokenType> r{ *TokenTypeList["SEMICOLON"] };
 		_require({ *TokenTypeList["SEMICOLON"] });
 		root->_addNode(codeStringNode);

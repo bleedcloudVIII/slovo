@@ -10,6 +10,7 @@
 #include "AST/NumberNode.h"
 #include "AST/VariableNode.h"
 #include "AST/BinOperationNode.h"
+#include "AST/UnarOperationNode.h"
 
 class Parser
 {
@@ -22,10 +23,12 @@ public:
 
 	std::variant<Token, int> _match(std::vector<TokenType>);
 	Token _require(std::vector<TokenType>);
-	ExpressionNode _parseExpression();
+	std::variant<UnarOperationNode*, BinOperationNode*> _parseExpression();
 	std::variant<NumberNode*, VariableNode*> _parseVariableOrNumber();
-	StatementsNode _parseCode();
+	StatementsNode* _parseCode();
 	std::variant<BinOperationNode*, std::variant<NumberNode*, VariableNode*>> _parseFormula();
 	std::variant<BinOperationNode*, std::variant<NumberNode*, VariableNode*>> _parseParenthese();
+	UnarOperationNode* _parsePrint()
+
 };
 
