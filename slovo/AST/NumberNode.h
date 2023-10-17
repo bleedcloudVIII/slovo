@@ -1,11 +1,13 @@
 #pragma once
 #include "../Token.h"
+#include "ExpressionNode.h"
 
-class NumberNode
+class NumberNode: public ExpressionNode
 {
 public:
 	Token _number;
 
 	NumberNode(Token);
+	
 };
 

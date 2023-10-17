@@ -1,6 +1,6 @@
 #include "StatementsNode.h"
 
-void StatementsNode::_addNode(std::variant<UnarOperationNode*, BinOperationNode*> n)
+void StatementsNode::_addNode(ExpressionNode n)
 {
 	_codeStrings.push_back(n);
 	

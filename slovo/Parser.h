@@ -23,12 +23,12 @@ public:
 
 	std::variant<Token, int> _match(std::vector<TokenType>);
 	Token _require(std::vector<TokenType>);
-	std::variant<UnarOperationNode*, BinOperationNode*> _parseExpression();
-	std::variant<NumberNode*, VariableNode*> _parseVariableOrNumber();
-	StatementsNode* _parseCode();
-	std::variant<BinOperationNode*, std::variant<NumberNode*, VariableNode*>> _parseFormula();
-	std::variant<BinOperationNode*, std::variant<NumberNode*, VariableNode*>> _parseParenthese();
-	UnarOperationNode* _parsePrint();
-	void run(StatementsNode* node);
+	ExpressionNode _parseExpression();
+	ExpressionNode _parseVariableOrNumber();
+	ExpressionNode _parseCode();
+	ExpressionNode _parseFormula();
+	ExpressionNode _parseParenthese();
+	ExpressionNode _parsePrint();
+	void run(ExpressionNode* node);
 };
 

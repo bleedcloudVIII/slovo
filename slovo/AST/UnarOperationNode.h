@@ -1,17 +1,13 @@
 #pragma once
 #include "ExpressionNode.h"
 #include "../Token.h"
-#include "BinOperationNode.h"
-#include "NumberNode.h"
-#include "VariableNode.h"
-#include <variant>
 
-class UnarOperationNode
+class UnarOperationNode: public ExpressionNode
 {
 public:
 	Token _operator;
-	std::variant<BinOperationNode*, std::variant<NumberNode*, VariableNode*>> _operand;
+	ExpressionNode _operand;
 
-	UnarOperationNode(Token, std::variant<BinOperationNode*, std::variant<NumberNode*, VariableNode*>>);
+	UnarOperationNode(Token, ExpressionNode);
 };
 
