@@ -34,7 +34,7 @@ Token Parser::_require(std::vector<TokenType> expected)
 	return std::get<Token>(token);
 };
 
-ExpressionNode Parser::_parseVariableOrNumber()
+std::variant<NumberNode*, VariableNode*> Parser::_parseVariableOrNumber()
 {
 	const std::variant<Token, int> number = _match({ *TokenTypeList["NUMBER"] });
 	if (number.index() != 1) return new NumberNode(number);
@@ -43,6 +43,33 @@ ExpressionNode Parser::_parseVariableOrNumber()
 	std::cout << "Ошибка. Ожидалось или число, или переменная." << std::endl;
 	throw "ERROR";
 
+}
+
+std::variant<BinOperationNode*, std::variant<NumberNode*, VariableNode*>> Parser::_parseParenthese()
+{
+	if (_match({ *TokenTypeList["LPAR"] }).index() == 1)
+	{
+		std::variant<BinOperationNode*, std::variant<NumberNode*, VariableNode*>>  node = _parseFormula();
+		_require({ *TokenTypeList["RPAR"] });
+		return node;
+	}
+	else
+	{
+		return _parseVariableOrNumber();
+	}
+}
+
+std::variant<BinOperationNode*, std::variant<NumberNode*, VariableNode*>> Parser::_parseFormula()
+{
+	std::variant<BinOperationNode*, std::variant<NumberNode*, VariableNode*>> leftNode = _parseParenthese();
+	std::variant<Token, int> oprtr = _match({ *TokenTypeList["MINUS"], *TokenTypeList["PLUS"] });
+	while (oprtr.index() != 1)
+	{
+		const std::variant<BinOperationNode*, std::variant<NumberNode*, VariableNode*>> rightNode = _parseParenthese();
+		leftNode = new BinOperationNode(std::get<Token>(oprtr), std::get<std::variant<NumberNode*, VariableNode*>>(leftNode), std::get<std::variant<NumberNode*, VariableNode*>>(rightNode));
+		oprtr = _match({ *TokenTypeList["MINUS"], *TokenTypeList["PLUS"] });
+	}
+	return leftNode;
 }
 
 ExpressionNode Parser::_parseExpression()
@@ -56,11 +83,13 @@ ExpressionNode Parser::_parseExpression()
 		return printNode;
 	}
 	_pos -= 1; // Возвращаем обратно позицию, т.к. в _match() делали + 1
-	variableNode = _parseVariableOrNumber();
+	std::variant <NumberNode*, VariableNode*> variableNode = _parseVariableOrNumber();
 	const std::variant<Token, int> assignOperator = _match({ *TokenTypeList["ASSIGN"] });
 	if (assignOperator.index() != 1)
 	{
-
+		const rightFormulaNode = _parseFormula();
+		const BinOperationNode* binaryNode = new BinOperationNode(std::get<Token>(assignOperator), variableNode, rightFormulaNode);
+		return binaryNode;
 	}
 	std::cout << "Ошибка. После переменной ожидается оператор присвоения." << std::endl;
 	throw "ERROR";
