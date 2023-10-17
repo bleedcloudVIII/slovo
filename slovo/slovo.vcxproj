@@ -129,9 +129,11 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="AST\BinOperationNode.cpp" />
     <ClCompile Include="AST\ExpressionNode.cpp" />
     <ClCompile Include="AST\NumberNode.cpp" />
     <ClCompile Include="AST\StatementsNode.cpp" />
+    <ClCompile Include="AST\UnarOperationNode.cpp" />
     <ClCompile Include="AST\VariableNode.cpp" />
     <ClCompile Include="Lexer.cpp" />
     <ClCompile Include="Parser.cpp" />
@@ -140,9 +142,11 @@
     <ClCompile Include="TokenType.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="AST\BinOperationNode.h" />
     <ClInclude Include="AST\ExpressionNode.h" />
     <ClInclude Include="AST\NumberNode.h" />
     <ClInclude Include="AST\StatementsNode.h" />
+    <ClInclude Include="AST\UnarOperationNode.h" />
     <ClInclude Include="AST\VariableNode.h" />
     <ClInclude Include="Lexer.h" />
     <ClInclude Include="Parser.h" />

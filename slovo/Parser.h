@@ -5,6 +5,11 @@
 #include <unordered_map>
 #include <string>
 #include <variant>
+#include "AST/ExpressionNode.h"
+#include "AST/StatementsNode.h"
+#include "AST/NumberNode.h"
+#include "AST/VariableNode.h"
+
 
 class Parser
 {
@@ -17,5 +22,8 @@ public:
 
 	std::variant<Token, int> _match(std::vector<TokenType>);
 	Token _require(std::vector<TokenType>);
+	ExpressionNode _parseExpression();
+	ExpressionNode _parseVariableOrNumber();
+	StatementsNode _parseCode();
 };
 
