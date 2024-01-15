@@ -29,6 +29,6 @@ public:
 	ExpressionNode _parseFormula();
 	ExpressionNode _parseParenthese();
 	ExpressionNode _parsePrint();
-	void run(ExpressionNode* node);
+	std::pair<int, std::string> run(ExpressionNode* node);
 };
 

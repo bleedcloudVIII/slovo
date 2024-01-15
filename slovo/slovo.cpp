@@ -1,10 +1,14 @@
 ﻿#include <iostream>
 #include <fstream>
 #include <string>
+//#include <Windows.h>
+
 #include "Lexer.h"
 #include "Token.h"
 #include "AST/NumberNode.h"
 #include "AST/VariableNode.h"
+#include "Parser.h"
+
 const int maxlength = INT_MAX;
 
 template<typename Base, typename T>
@@ -15,23 +19,31 @@ inline bool instanceof(const T*)
 
 int main()
 {
+    //SetConsoleCP(1251);
+    //SetConsoleOutputCP(1251);
+
     std::ifstream file("main.slovo");
     std::string code;
 
-    char* line = new char[maxlength];
-    while (file.getline(line, maxlength))
-    {
-        code += line;
-    }
+    //char* line = new char[maxlength];
+    //while (file.getline(line, maxlength))
+    //{
+    //    code += line;
+    //}
 
     Lexer* lexer = new Lexer(code);
-    //lexer->lexAnalysis();
-    std::vector<Token> tokenList = lexer->lexAnalysis();
-    TokenType b("asd", "da");
-    Token t(b, "asd", 0);
-    NumberNode* a = new NumberNode(t);
+    lexer->lexAnalysis();
+    //std::vector<Token> tokenList = lexer->lexAnalysis();
+    Parser* parser = new Parser(lexer->_tokenList);
+    ExpressionNode rootNode = parser->_parseCode();
+    ExpressionNode* n = new ExpressionNode(rootNode);
+    parser->run(n);
 
-    std::cout << instanceof<ExpressionNode>(a);
+    //TokenType b("asd", "da");
+    //Token t(b, "asd", 0);
+    //NumberNode* a = new NumberNode(t);
+
+    //std::cout << instanceof<ExpressionNode>(a);
 
     //for (int i = 0; i < tokenList.size(); i++)
     //{

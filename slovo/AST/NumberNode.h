@@ -8,6 +8,5 @@ public:
 	Token _number;
 
 	NumberNode(Token);
-	
 };
 

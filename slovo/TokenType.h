@@ -12,6 +12,7 @@ public:
 
 	TokenType(std::string, std::string);
 	TokenType();
+
 };
 
 extern std::unordered_map<std::string, TokenType*> TokenTypeList;
