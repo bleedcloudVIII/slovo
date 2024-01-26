@@ -5,7 +5,7 @@
 #include "../Token.h"
 #include <variant>
 
-class BinOperationNode: public ExpressionNode
+class BinOperationNode//:  public ExpressionNode
 {
 public:
 	Token _operator;

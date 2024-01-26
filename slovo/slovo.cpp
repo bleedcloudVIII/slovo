@@ -25,13 +25,14 @@ int main()
     std::ifstream file("main.slovo");
     std::string code;
 
-    //char* line = new char[maxlength];
-    //while (file.getline(line, maxlength))
-    //{
-    //    code += line;
-    //}
+    char* line = new char[maxlength];
+    while (file.getline(line, maxlength))
+    {
+        code += line;
+    }
 
     Lexer* lexer = new Lexer(code);
+    //std::cout << code << std::endl;
     lexer->lexAnalysis();
     //std::vector<Token> tokenList = lexer->lexAnalysis();
     Parser* parser = new Parser(lexer->_tokenList);

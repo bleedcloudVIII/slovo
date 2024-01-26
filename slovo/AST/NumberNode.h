@@ -2,7 +2,7 @@
 #include "../Token.h"
 #include "ExpressionNode.h"
 
-class NumberNode: public ExpressionNode
+class NumberNode//: public ExpressionNode
 {
 public:
 	Token _number;

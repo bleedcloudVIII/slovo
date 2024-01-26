@@ -3,12 +3,12 @@
 #include <vector>
 #include <string>
 
-class StatementsNode: public ExpressionNode
+class StatementsNode//: public ExpressionNode
 {
 public:
 	std::vector<ExpressionNode> _codeStrings;
 
-	//StatementsNode();
+	StatementsNode();
 
 	void _addNode(ExpressionNode);
 

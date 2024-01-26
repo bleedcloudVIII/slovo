@@ -12,9 +12,11 @@ bool _find(std::vector<TokenType> tokenList, Token token)
 
 std::variant<Token, int> Parser::_match(std::vector<TokenType> expected)
 {
+	//std::cout << _pos << std::endl;
 	if (_pos < _tokens.size())
 	{
 		const Token currentToken = _tokens[_pos];
+
 		if (_find(expected, currentToken))
 		{
 			_pos += 1;
@@ -38,9 +40,9 @@ Token Parser::_require(std::vector<TokenType> expected)
 ExpressionNode Parser::_parseVariableOrNumber()
 {
 	const std::variant<Token, int> number = _match({ *TokenTypeList["NUMBER"] });
-	if (number.index() != 1) return NumberNode(std::get<Token>(number));
+	if (number.index() != 1) return ExpressionNode(new NumberNode(std::get<Token>(number)));
 	const std::variant<Token, int> variable = _match({ *TokenTypeList["VARIABLE"] });
-	if (variable.index() != 1) return VariableNode(std::get<Token>(variable));
+	if (variable.index() != 1) return ExpressionNode(new VariableNode(std::get<Token>(variable)));
 	std::cout << "Error. Ozhidalos chislo ili peremennaya." << std::endl;
 	std::cout << "Ошибка. Ожидалось или число, или переменная." << std::endl;
 	throw "ERROR";
@@ -49,7 +51,7 @@ ExpressionNode Parser::_parseVariableOrNumber()
 
 ExpressionNode Parser::_parseParenthese()
 {
-	if (_match({ *TokenTypeList["LPAR"] }).index() == 1)
+	if (_match({ *TokenTypeList["LPAR"] }).index() != 1)
 	{
 		ExpressionNode node = _parseFormula();
 		_require({ *TokenTypeList["RPAR"] });
@@ -66,7 +68,7 @@ ExpressionNode Parser::_parsePrint()
 	std::variant<Token, int> t = _match({ *TokenTypeList["LOG"]});
 	if (t.index() != 1)
 	{
-		return UnarOperationNode(std::get<Token>(t), _parseFormula());
+		return ExpressionNode(new UnarOperationNode(std::get<Token>(t), _parseFormula()));
 	}
 	std::cout << "ERROR." << std::endl;
 	throw "Ожидается унарный опепатор log.[Ozhidalsya unarniy operator log]";
@@ -79,7 +81,7 @@ ExpressionNode Parser::_parseFormula()
 	while (oprtr.index() != 1)
 	{
 		const ExpressionNode rightNode = _parseParenthese();
-		leftNode = BinOperationNode(std::get<Token>(oprtr), leftNode, rightNode);
+		leftNode = ExpressionNode(new BinOperationNode(std::get<Token>(oprtr), leftNode, rightNode));
 		oprtr = _match({ *TokenTypeList["MINUS"], *TokenTypeList["PLUS"] });
 	}
 	return leftNode;
@@ -98,27 +100,29 @@ ExpressionNode Parser::_parseFormula()
 	_pos -= 1; // Возвращаем обратно позицию, т.к. в _match() делали + 1
 	ExpressionNode variableNode = _parseVariableOrNumber();
 	const std::variant<Token, int> assignOperator = _match({ *TokenTypeList["ASSIGN"] });
+	//std::cout << assignOperator.index() << std::endl;
 	if (assignOperator.index() != 1)
 	{
 		const ExpressionNode rightFormulaNode = _parseFormula();
-		BinOperationNode binaryNode = BinOperationNode(std::get<Token>(assignOperator), variableNode, rightFormulaNode);
-		return binaryNode;
+		BinOperationNode* binaryNode = new BinOperationNode(std::get<Token>(assignOperator), variableNode, rightFormulaNode);
+		return ExpressionNode(binaryNode);
 	}
 	std::cout << "Error. After peremennoi ozhidaetsya operator prisvoeniya." << std::endl;
-	std::cout << "Ошибка. После переменной ожидается оператор присвоения." << std::endl;
+	std::cout << "Ошибка. После переменной ожидается оператор присвоения на позиции " << _pos << std::endl;
 	throw "ERROR";
 };
 
  ExpressionNode Parser::_parseCode()
 {
-	 StatementsNode root;
+	 StatementsNode* root = new StatementsNode;
 	 while (_pos < _tokens.size())
 	 {
 		 const ExpressionNode codeStringNode = _parseExpression();
+		 //std::cout << "WQDDASWAQswdasqw" << std::endl;
 		 _require({ *TokenTypeList["SEMICOLON"] });
-		 root._addNode(codeStringNode);
+		 root->_addNode(codeStringNode);
 	 }
-	 return root;
+	 return ExpressionNode(root);
 };
 
  template<typename Base, typename T>
@@ -147,98 +151,110 @@ ExpressionNode Parser::_parseFormula()
 
  std::pair<int, std::string> Parser::run(ExpressionNode* node)
  {
-	 std::cout << "HEHEHE" << std::endl;
-	 std::cout << TokenTypeList["LOG"]->_name << std::endl;
-	 std::cout << TokenTypeList["LOG"]->_regex << std::endl;
+	 //std::cout << "HEHEHE" << std::endl;
+	 //std::cout << TokenTypeList["LOG"]->_name << std::endl;
+	 //std::cout << TokenTypeList["LOG"]->_regex << std::endl;
 
-	 std::cout << instanceof<NumberNode>(node) << std::endl;
-	 std::cout << instanceof<BinOperationNode>(node) << std::endl;
-	 std::cout << instanceof<UnarOperationNode>(node) << std::endl;
-	 std::cout << instanceof<VariableNode>(node) << std::endl;
-	 std::cout << instanceof<ExpressionNode>(node) << std::endl;
-	 std::cout << instanceof<StatementsNode>(node) << std::endl;
+	 //std::cout << instanceof<NumberNode>(node) << std::endl;
+	 //std::cout << instanceof<BinOperationNode>(node) << std::endl;
+	 //std::cout << instanceof<UnarOperationNode>(node) << std::endl;
+	 //std::cout << instanceof<VariableNode>(node) << std::endl;
+	 //std::cout << instanceof<ExpressionNode>(node) << std::endl;
+	 //std::cout << instanceof<StatementsNode>(node) << std::endl;
 	 //std::cout << instanceof<ExpressionNode>(node) << std::endl;
 
+	 //std::cout << "------------------------------------------------" << std::endl;
+	 //std::cout << (node->_binNode != nullptr) << std::endl;
+	 //std::cout << (node->_numNode != nullptr) << std::endl;
+	 //std::cout << (node->_stateNode != nullptr) << std::endl;
+	 //std::cout << (node->_unarNode != nullptr) << std::endl;
+	 //std::cout << (node->_varNode != nullptr) << std::endl;
+	 //std::cout << "------------------------------------------------" << std::endl;
 
 
 
-	 if (instanceof<NumberNode>(node))
+	 if (node->_numNode != nullptr)
 	 {
 		// return int
 		// return parseInt(node.number.text);
-		 std::cout << "A1" << std::endl;
-		 NumberNode* numNode{ static_cast<NumberNode*>(node) };
-		 std::cout << "A2" << std::endl;
+		 //std::cout << "A1" << std::endl;
+		 //NumberNode* numNode{ static_cast<NumberNode*>(node) };
+		 //std::cout << "A2" << std::endl;
 
-		 std::cout << numNode->_number._text << std::endl;
+		 //std::cout << node->_numNode->_number._text << std::endl;
+		 //std::cout << std::stoi(node->_numNode->_number._text) << std::endl;
+
+		 return std::pair<int, std::string>{std::stoi(node->_numNode->_number._text), ""};
 	 }
-	 if (instanceof<UnarOperationNode>(node))
+	 if (node->_unarNode != nullptr)
 	 {
-		 std::cout << "A3" << std::endl;
+		 //std::cout << "A3" << std::endl;
 
-		 UnarOperationNode* unarNode{ static_cast<UnarOperationNode*>(node) };
-		 if (unarNode->_operator._type._name == TokenTypeList["LOG"]->_name)
+		 //UnarOperationNode* unarNode{ static_cast<UnarOperationNode*>(node) };
+		 if (node->_unarNode->_operator._type._name == TokenTypeList["LOG"]->_name)
 		 {
-			 (run(new ExpressionNode(unarNode->_operand))); // !!!!!!!!!!!!!!!!!!!!!!!
+			 std::cout << run(new ExpressionNode(node->_unarNode->_operand)).first << std::endl; // NE RABOTAET NUJNO MENYAT TIP VOZVRASHAEMIH DANNIH (HUZHEN NULL)
 			 return std::pair<int, std::string>{0, ""};
 
 		 }
-		 std::cout << "A4" << std::endl;
+		 //std::cout << "A4" << std::endl;
 
 	 }
-	 if (instanceof<BinOperationNode>(node))
+	 if (node->_binNode != nullptr)
 	 {
-		 std::cout << "A5" << std::endl;
+		 //std::cout << "A5" << std::endl;
 
-		 BinOperationNode* binNode{ static_cast<BinOperationNode*>(node) };
-		 if (binNode->_operator._type._name == TokenTypeList["PLUS"]->_name)
+		 //BinOperationNode* binNode{ static_cast<BinOperationNode*>(node) };
+		 if (node->_binNode->_operator._type._name == TokenTypeList["PLUS"]->_name)
 		 {
-			 return std::pair<int, std::string>{ run(new ExpressionNode(binNode->_leftNode)).first + run(new ExpressionNode(binNode->_rightNode)).first, ""}; // !!!!!!!!!!!!!!!!!!!!
+			 return std::pair<int, std::string>{ run(new ExpressionNode(node->_binNode->_leftNode)).first + run(new ExpressionNode(node->_binNode->_rightNode)).first, ""}; // !!!!!!!!!!!!!!!!!!!!
 		 }
-		 else if (binNode->_operator._type._name == TokenTypeList["MINUS"]->_name)
+		 else if (node->_binNode->_operator._type._name == TokenTypeList["MINUS"]->_name)
 		 {
-			 return std::pair<int, std::string>{ run(new ExpressionNode(binNode->_leftNode)).first - run(new ExpressionNode(binNode->_rightNode)).first, ""}; // !!!!!!!!!!!!!!!!!!!!
+			 return std::pair<int, std::string>{ run(new ExpressionNode(node->_binNode->_leftNode)).first - run(new ExpressionNode(node->_binNode->_rightNode)).first, ""}; // !!!!!!!!!!!!!!!!!!!!
 		 }
-		 else if (binNode->_operator._type._name == TokenTypeList["ASSIGN"]->_name)
+		 else if (node->_binNode->_operator._type._name == TokenTypeList["ASSIGN"]->_name)
 		 {
-			 auto result = run( new ExpressionNode(binNode->_rightNode));
-			 VariableNode* varNode{ static_cast<VariableNode*>(new ExpressionNode(binNode->_leftNode)) };
-			 _scope[varNode->_variable._text] = result.first;
+			 auto result = run( new ExpressionNode(node->_binNode->_rightNode));
+			 //VariableNode* varNode{ static_cast<VariableNode*>(new ExpressionNode(node->_binNode->_leftNode)) };
+			 //_scope[node->_varNode->_variable._text] = result.first;
+			 _scope["a"] = result.first;
 			 return result;
 		 }
-		 std::cout << "A6" << std::endl;
+		 //std::cout << "A6" << std::endl;
 
 	 }
-	 if (instanceof<VariableNode>(node))
+	 if (node->_varNode != nullptr)
 	 {
-		 std::cout << "A7" << std::endl;
+		 //std::cout << "A7" << std::endl;
 
-		 VariableNode* varNode{ static_cast<VariableNode*>(node) };
+		 //VariableNode* varNode{ static_cast<VariableNode*>(node) };
 		 //std::unordered_map<std::string, std::string> _scope;
-		 if (_scope[varNode->_variable._text] != "")
+		 if (_scope[node->_varNode->_variable._text] != "")
 		 {
-			 return std::pair<int, std::string>{ 0, _scope[varNode->_variable._text] };
+			 return std::pair<int, std::string>{ 0, _scope[node->_varNode->_variable._text] };
 		 }
 		 else throw "Error. Peremennaya c nazvaniem ... ne obnaruzhena";
-		 std::cout << "A8" << std::endl;
+		 //std::cout << "A8" << std::endl;
 
 	 }
-	 if (instanceof<StatementsNode>(node))
+	 if (node->_stateNode != nullptr)
 	 {
-		 std::cout << "A9" << std::endl;
+		 //std::cout << "A9" << std::endl;
 
-		 StatementsNode* stateNode{ static_cast<StatementsNode*>(node) };
-		 for (ExpressionNode codeString : stateNode->_codeStrings)
+		 //StatementsNode* stateNode{ static_cast<StatementsNode*>(node) };
+		 for (ExpressionNode codeString : node->_stateNode->_codeStrings)
 		 {
-			 run(new ExpressionNode(codeString));
+			 std::pair<int, std::string> result =  run(new ExpressionNode(codeString));
+			 //std::cout << result.first << " - " << result.second << std::endl;
 		 };
-		 std::cout << "A10" << std::endl;
+		 //std::cout << "A10" << std::endl;
 
 		 return std::pair<int, std::string>{0, ""};
 	 }
-	 std::cout << "A11" << std::endl;
+	 //std::cout << "A11" << std::endl;
 	 return std::pair<int, std::string>{0, ""};
 
-	 //throw "ERROREORROER";
+	 throw "ERROREORROER";
 
  }
