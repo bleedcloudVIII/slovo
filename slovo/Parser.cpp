@@ -218,7 +218,7 @@ ExpressionNode Parser::_parseFormula()
 			 auto result = run( new ExpressionNode(node->_binNode->_rightNode));
 			 //VariableNode* varNode{ static_cast<VariableNode*>(new ExpressionNode(node->_binNode->_leftNode)) };
 			 //_scope[node->_varNode->_variable._text] = result.first;
-			 _scope["a"] = result.first;
+			 _scope[node->_binNode->_leftNode._varNode->_variable._text] = result.first;
 			 return result;
 		 }
 		 //std::cout << "A6" << std::endl;
