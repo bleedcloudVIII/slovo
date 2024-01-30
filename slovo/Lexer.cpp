@@ -11,6 +11,8 @@ std::unordered_map<std::string, TokenType*>  TokenTypeList = {
 	{"SPACE", new TokenType("SPACE", "[ \\n \\t \\r \\s]")},
 	{"PLUS", new TokenType("PLUS", "\\+")},
 	{"MINUS", new TokenType("MINUS", "\\-")},
+	{"KAVICHKI", new TokenType("SKOBKA", "\"[a-z]*\"")},
+	//{"", new TokenType("", "")},
 	{"LPAR", new TokenType("LPAR", "\\(")},
 	{"RPAR", new TokenType("RPAR", "\\)")}
 };

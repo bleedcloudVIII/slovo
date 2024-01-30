@@ -11,6 +11,7 @@
 #include "AST/VariableNode.h"
 #include "AST/BinOperationNode.h"
 #include "AST/UnarOperationNode.h"
+#include "AST/StringNode.h"
 
 class Parser
 {
@@ -29,6 +30,7 @@ public:
 	ExpressionNode _parseFormula();
 	ExpressionNode _parseParenthese();
 	ExpressionNode _parsePrint();
+	//ExpressionNode _parseSkobki();
 	//std::pair<int, std::string> run(ExpressionNode* node);
 	//int run(ExpressionNode*);
 	int run(ExpressionNode*);

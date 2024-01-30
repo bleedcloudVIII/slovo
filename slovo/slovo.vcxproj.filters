@@ -48,6 +48,9 @@
     <ClCompile Include="AST\UnarOperationNode.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
+    <ClCompile Include="AST\StringNode.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Lexer.h">
@@ -78,6 +81,9 @@
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
     <ClInclude Include="AST\UnarOperationNode.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="AST\StringNode.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
   </ItemGroup>

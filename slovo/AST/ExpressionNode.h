@@ -11,6 +11,7 @@ class NumberNode;
 class StatementsNode;
 class UnarOperationNode;
 class VariableNode;
+class StringNode;
 
 class ExpressionNode
 {
@@ -20,12 +21,14 @@ public:
 	StatementsNode* _stateNode = nullptr;
 	UnarOperationNode* _unarNode = nullptr;
 	VariableNode* _varNode = nullptr;
+	StringNode* _strNode = nullptr;
 
 	ExpressionNode(BinOperationNode*);
 	ExpressionNode(NumberNode*);
 	ExpressionNode(StatementsNode*);
 	ExpressionNode(UnarOperationNode*);
 	ExpressionNode(VariableNode*);
+	ExpressionNode(StringNode*);
 	ExpressionNode();
 };
 

@@ -13,7 +13,6 @@ bool _find(std::vector<TokenType> tokenList, Token token)
 
 std::variant<Token, int> Parser::_match(std::vector<TokenType> expected)
 {
-	//std::cout << _pos << std::endl;
 	if (_pos < _tokens.size())
 	{
 		const Token currentToken = _tokens[_pos];
@@ -38,13 +37,28 @@ Token Parser::_require(std::vector<TokenType> expected)
 	return std::get<Token>(token);
 };
 
+std::string removeKavichki(std::string str)
+{
+	std::string result = "";
+	for (int i = 1; i < str.size() - 1; i++)
+		result.push_back(str[i]);
+	return result;
+};
+
 ExpressionNode Parser::_parseVariableOrNumber()
 {
+	const std::variant<Token, int> string = _match({ *TokenTypeList["KAVICHKI"] });
+	if (string.index() != 1)
+	{
+		StringNode* strNode = new StringNode(std::get<Token>(string));
+		strNode->_str._text = removeKavichki(strNode->_str._text);
+		return ExpressionNode(strNode);
+	};
 	const std::variant<Token, int> number = _match({ *TokenTypeList["NUMBER"] });
 	if (number.index() != 1) return ExpressionNode(new NumberNode(std::get<Token>(number)));
 	const std::variant<Token, int> variable = _match({ *TokenTypeList["VARIABLE"] });
 	if (variable.index() != 1) return ExpressionNode(new VariableNode(std::get<Token>(variable)));
-	std::cout << "Error. Ozhidalos chislo ili peremennaya." << std::endl;
+	std::cout << "Error. Ozhidalos chislo ili peremennaya ili stroka." << std::endl;
 	std::cout << "Ошибка. Ожидалось или число, или переменная." << std::endl;
 	throw "ERROR";
 
@@ -72,7 +86,7 @@ ExpressionNode Parser::_parsePrint()
 		return ExpressionNode(new UnarOperationNode(std::get<Token>(t), _parseFormula()));
 	}
 	std::cout << "ERROR." << std::endl;
-	throw "Ожидается унарный опепатор log.[Ozhidalsya unarniy operator log]";
+	throw "Ожидается унарный оператор log.[Ozhidalsya unarniy operator log]";
 }
 
 
@@ -92,7 +106,6 @@ ExpressionNode Parser::_parseFormula()
 ExpressionNode Parser::_parseExpression()
 {
 
-	//std::vector<TokenType> v{ *TokenTypeList["VARIABLE"] };
 	const std::variant<Token, int> m = _match({ *TokenTypeList["VARIABLE"]});
 	if (m.index() == 1)
 	{
@@ -103,8 +116,7 @@ ExpressionNode Parser::_parseExpression()
 	_pos -= 1; // Возвращаем обратно позицию, т.к. в _match() делали + 1
 	ExpressionNode variableNode = _parseVariableOrNumber();
 	const std::variant<Token, int> assignOperator = _match({ *TokenTypeList["ASSIGN"] });
-	//std::cout << assignOperator.index() << std::endl;
-	if (assignOperator.index() != 1)
+	if (assignOperator.index() != 1) // If on _pos assign
 	{
 		const ExpressionNode rightFormulaNode = _parseFormula();
 		BinOperationNode* binaryNode = new BinOperationNode(std::get<Token>(assignOperator), variableNode, rightFormulaNode);
@@ -123,52 +135,11 @@ ExpressionNode Parser::_parseCode()
 	{
 
 		const ExpressionNode codeStringNode = _parseExpression();
-		//std::cout << "WQDDASWAQswdasqw" << std::endl;
 		_require({ *TokenTypeList["SEMICOLON"] });
 		root->_addNode(codeStringNode);
 	}
 	return ExpressionNode(root);
 };
-
- template<typename Base, typename T>
- //inline bool instanceof(const T *ptr)
- inline bool instanceof(const T*)
- {
-	 return std::is_base_of<Base, T>::value;
-	 //return dynamic_cast<const Base*>(ptr) != nullptr;
- }
- /*
- std::unordered_map<std::string, TokenType*>  TokenTypeList = {
-	{"VARIABLE", new TokenType("VARIABLE", "[a-z]*")},
-	{"ASSIGN", new TokenType("ASSIGN", "\\=")},
-	{"NUMBER", new TokenType("NUMBER", "[0-9]*")},
-	{"SEMICOLON", new TokenType("SEMICOLON", "\\;")},
-	{"SPACE", new TokenType("SPACE", "[ \\n \\t \\r \\s]")},
-	{"LOG", new TokenType("LOG", "log")},
-	{"PLUS", new TokenType("PLUS", "\\+")},
-	{"MINUS", new TokenType("MINUS", "\\-")},
-	{"LPAR", new TokenType("LPAR", "\\(")},
-	{"RPAR", new TokenType("RPAR", "\\)")}
-};
- */
-
- //class Data
- //{
- //public:
-	// bool isNull = true;
-	// std::string data = "";
-
-	// Data(std::string d) : isNull(false), data(d) {};
-	// Data(bool f) : isNull(f), data("") {};
-	// Data(std::string d, bool f) : isNull(f), data(d) {};
-	//// Data(bool f, std::string d) : isNull(f), data(d) {};
-	// Data() : isNull(true), data("") {};
- //};
-
- //int Parser::run(ExpressionNode* node)
- //{
-	// return 0;
- //};
 
  std::stack<int> num_stack{};
  std::stack<std::string> str_stack{};
@@ -179,6 +150,11 @@ int Parser::run(ExpressionNode* node)
 	{
  		num_stack.push(std::stoi(node->_numNode->_number._text));
  		return 0;
+	}
+	if (node->_strNode != nullptr)
+	{
+		str_stack.push(node->_strNode->_str._text);
+		return 1;
 	}
 	if (node->_unarNode != nullptr)
 	{
@@ -274,5 +250,6 @@ int Parser::run(ExpressionNode* node)
 		};
 		return 2;
 	}
+
 	throw "ERROREORROER";
  }
