@@ -93,12 +93,12 @@ ExpressionNode Parser::_parsePrint()
 ExpressionNode Parser::_parseFormula()
 {
 	ExpressionNode leftNode = _parseParenthese();
-	std::variant<Token, int> oprtr = _match({ *TokenTypeList["MINUS"], *TokenTypeList["PLUS"] });
+	std::variant<Token, int> oprtr = _match({ *TokenTypeList["MINUS"], *TokenTypeList["PLUS"], *TokenTypeList["UMNOJ"], *TokenTypeList["DELENIE"] });
 	while (oprtr.index() != 1)
 	{
 		const ExpressionNode rightNode = _parseParenthese();
 		leftNode = ExpressionNode(new BinOperationNode(std::get<Token>(oprtr), leftNode, rightNode));
-		oprtr = _match({ *TokenTypeList["MINUS"], *TokenTypeList["PLUS"] });
+		oprtr = _match({ *TokenTypeList["MINUS"], *TokenTypeList["PLUS"], *TokenTypeList["UMNOJ"], *TokenTypeList["DELENIE"] });
 	}
 	return leftNode;
 }
@@ -199,6 +199,28 @@ int Parser::run(ExpressionNode* node)
 			num_stack.pop();
 			run(new ExpressionNode(node->_binNode->_rightNode));
 			result -= num_stack.top();
+			num_stack.pop();
+			num_stack.push(result);
+			return 0;
+		}
+		else if (node->_binNode->_operator._type._name == TokenTypeList["UMNOJ"]->_name)
+		{
+			run(new ExpressionNode(node->_binNode->_leftNode));
+			int result = num_stack.top();
+			num_stack.pop();
+			run(new ExpressionNode(node->_binNode->_rightNode));
+			result *= num_stack.top();
+			num_stack.pop();
+			num_stack.push(result);
+			return 0;
+		}
+		else if (node->_binNode->_operator._type._name == TokenTypeList["DELENIE"]->_name)
+		{
+			run(new ExpressionNode(node->_binNode->_leftNode));
+			int result = num_stack.top();
+			num_stack.pop();
+			run(new ExpressionNode(node->_binNode->_rightNode));
+			result /= num_stack.top();
 			num_stack.pop();
 			num_stack.push(result);
 			return 0;

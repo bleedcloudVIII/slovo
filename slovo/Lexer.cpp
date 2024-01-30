@@ -13,7 +13,9 @@ std::unordered_map<std::string, TokenType*>  TokenTypeList = {
 	{"MINUS", new TokenType("MINUS", "\\-")},
 	{"KAVICHKI", new TokenType("KAVICHKI", "\"[a-z]*\"")},
 	{"LPAR", new TokenType("LPAR", "\\(")},
-	{"RPAR", new TokenType("RPAR", "\\)")}
+	{"RPAR", new TokenType("RPAR", "\\)")},
+	{"UMNOJ", new TokenType("UMNOJ", "\\*")},
+	{"DELENIE", new TokenType("DELENIE", "\\/")},
 };
 
 Lexer::Lexer(std::string c) : _code(c) {};
