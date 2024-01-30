@@ -14,8 +14,6 @@ public:
 	Token(const Token&);
 	Token();
 
-	//void operator =(Token);
-
 	std::string getText();
 };
 

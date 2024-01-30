@@ -11,8 +11,7 @@ std::unordered_map<std::string, TokenType*>  TokenTypeList = {
 	{"SPACE", new TokenType("SPACE", "[ \\n \\t \\r \\s]")},
 	{"PLUS", new TokenType("PLUS", "\\+")},
 	{"MINUS", new TokenType("MINUS", "\\-")},
-	{"KAVICHKI", new TokenType("SKOBKA", "\"[a-z]*\"")},
-	//{"", new TokenType("", "")},
+	{"KAVICHKI", new TokenType("KAVICHKI", "\"[a-z]*\"")},
 	{"LPAR", new TokenType("LPAR", "\\(")},
 	{"RPAR", new TokenType("RPAR", "\\)")}
 };
@@ -40,22 +39,12 @@ std::vector<TokenType*> _getValues()
 
 std::vector<Token> Lexer::lexAnalysis()
 {
-	//std::cout << "=============================" << std::endl;
 	while (this->nextToken()) {}
 	std::vector<Token> tokenListWithoutSpace;
 	for (int i = 0; i < _tokenList.size(); i++)
 	{
 		if (_tokenList[i]._type._name != "SPACE") tokenListWithoutSpace.push_back(_tokenList[i]);
-		//std::cout << "{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{" << std::endl;
-		//std::cout << _tokenList[i]._type._name << std::endl;
-		//std::cout << (_tokenList[i]._type._name != "SPACE") << std::endl;
-		//std::cout << _tokenList[i]._type._regex << std::endl;
-		//std::cout << _tokenList[i]._text << std::endl;
-		//std::cout << _tokenList[i]._pos << std::endl;
-		//std::cout << "{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{" << std::endl;
-
 	}
-	//std::cout << "=============================" << std::endl;
 
 	_tokenList = tokenListWithoutSpace;
 	return tokenListWithoutSpace;
@@ -65,12 +54,6 @@ bool Lexer::nextToken()
 {
 	if (this->_pos >= this->_code.length()) return false;
 	const std::vector<TokenType*> tokenTypesValues = _getValues();
-
-	//std::cout << "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAa" << std::endl;
-	//for (int i = 0; i < tokenTypesValues.size(); i++)
-	//	std::cout << tokenTypesValues[i]->_name << std::endl;
-	//std::cout << "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAa" << std::endl;
-
 	for (int i = 0; i < tokenTypesValues.size(); i++)
 	{
 		TokenType* tokenType = tokenTypesValues[i];
