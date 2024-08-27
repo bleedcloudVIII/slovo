@@ -13,7 +13,7 @@ class UnarOperationNode;
 class VariableNode;
 class StringNode;
 
-class ExpressionNode
+class ExpressionNode // Корневой класс для всех Node
 {
 public:
 	BinOperationNode* binNode = nullptr;

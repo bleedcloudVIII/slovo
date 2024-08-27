@@ -37,7 +37,7 @@ Token Parser::require(std::vector<TokenType> expected)
 	return std::get<Token>(token);
 };
 
-std::string removeKavichki(std::string str)
+std::string removeSTRING(std::string str)
 {
 	std::string result = "";
 	for (int i = 1; i < str.size() - 1; i++)
@@ -47,11 +47,11 @@ std::string removeKavichki(std::string str)
 
 ExpressionNode Parser::parseVariableOrNumber()
 {
-	const std::variant<Token, int> string = match({ *TokenTypeList["KAVICHKI"] });
+	const std::variant<Token, int> string = match({ *TokenTypeList["STRING"] });
 	if (string.index() != 1)
 	{
 		StringNode* strNode = new StringNode(std::get<Token>(string));
-		strNode->str.text = removeKavichki(strNode->str.text);
+		strNode->str.text = removeSTRING(strNode->str.text);
 		return ExpressionNode(strNode);
 	};
 	const std::variant<Token, int> number = match({ *TokenTypeList["NUMBER"] });
@@ -93,12 +93,12 @@ ExpressionNode Parser::parsePrint()
 ExpressionNode Parser::parseFormula()
 {
 	ExpressionNode leftNode = parseParenthese();
-	std::variant<Token, int> oprtr = match({ *TokenTypeList["MINUS"], *TokenTypeList["PLUS"], *TokenTypeList["UMNOJ"], *TokenTypeList["DELENIE"] });
+	std::variant<Token, int> oprtr = match({ *TokenTypeList["MINUS"], *TokenTypeList["PLUS"], *TokenTypeList["MULTIPLICATION"], *TokenTypeList["DIVISON"] });
 	while (oprtr.index() != 1)
 	{
 		const ExpressionNode rightNode = parseParenthese();
 		leftNode = ExpressionNode(new BinOperationNode(std::get<Token>(oprtr), leftNode, rightNode));
-		oprtr = match({ *TokenTypeList["MINUS"], *TokenTypeList["PLUS"], *TokenTypeList["UMNOJ"], *TokenTypeList["DELENIE"] });
+		oprtr = match({ *TokenTypeList["MINUS"], *TokenTypeList["PLUS"], *TokenTypeList["MULTIPLICATION"], *TokenTypeList["DIVISON"] });
 	}
 	return leftNode;
 }
@@ -203,7 +203,7 @@ int Parser::run(ExpressionNode* node)
 			num_stack.push(result);
 			return 0;
 		}
-		else if (node->binNode->_operator.type.name == TokenTypeList["UMNOJ"]->name)
+		else if (node->binNode->_operator.type.name == TokenTypeList["MULTIPLICATION"]->name)
 		{
 			run(new ExpressionNode(node->binNode->leftNode));
 			int result = num_stack.top();
@@ -214,7 +214,7 @@ int Parser::run(ExpressionNode* node)
 			num_stack.push(result);
 			return 0;
 		}
-		else if (node->binNode->_operator.type.name == TokenTypeList["DELENIE"]->name)
+		else if (node->binNode->_operator.type.name == TokenTypeList["DIVISON"]->name)
 		{
 			run(new ExpressionNode(node->binNode->leftNode));
 			int result = num_stack.top();

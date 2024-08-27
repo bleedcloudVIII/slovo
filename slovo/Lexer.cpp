@@ -4,6 +4,7 @@
 //
 std::unordered_map<std::string, TokenType*>  TokenTypeList = {
 	{"LOG", new TokenType("LOG", "log")},
+	{"STRING", new TokenType("STRING", "\"[a-z]*\"")}, // Ne rabotaut stroki v kavichkah
 	{"VARIABLE", new TokenType("VARIABLE", "[a-z]*")},
 	{"ASSIGN", new TokenType("ASSIGN", "\\=")},
 	{"NUMBER", new TokenType("NUMBER", "[0-9]*")},
@@ -11,11 +12,10 @@ std::unordered_map<std::string, TokenType*>  TokenTypeList = {
 	{"SPACE", new TokenType("SPACE", "[ \\n \\t \\r]")},
 	{"PLUS", new TokenType("PLUS", "\\+")},
 	{"MINUS", new TokenType("MINUS", "\\-")},
-	{"KAVICHKI", new TokenType("KAVICHKI", "\"[a-z]*\"")},
 	{"LPAR", new TokenType("LPAR", "\\(")},
 	{"RPAR", new TokenType("RPAR", "\\)")},
-	{"UMNOJ", new TokenType("MULTIPLICATION", "\\*")},
-	{"DELENIE", new TokenType("DIVISON", "\\/")},
+	{"MULTIPLICATION", new TokenType("MULTIPLICATION", "\\*")},
+	{"DIVISON", new TokenType("DIVISON", "\\/")},
 };
 
 Lexer::Lexer(std::string c) : code(c) {};
