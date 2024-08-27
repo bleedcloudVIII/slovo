@@ -1,23 +1,23 @@
 #include "Token.h"
 
-Token::Token(TokenType& t, std::string txt, int p) : _type(t), _text(txt), _pos(p) {};
+Token::Token(TokenType& t, std::string txt, int p) : type(t), text(txt), pos(p) {};
 
-Token::Token(const Token& t) : _type(t._type), _text(t._text), _pos(t._pos) {};
+Token::Token(const Token& t) : type(t.type), text(t.text), pos(t.pos) {};
 
-Token::Token() : _text(""), _pos(-1)
+Token::Token() : text(""), pos(-1)
 {
 	TokenType a;
-	_type = a;
+	type = a;
 };
 
 std::string Token::getText()
 {
-	return _text;
+	return text;
 }
 
 //void Token::operator=(Token t)
 //{
-//	_type = t._type;
-//	_pos = t._pos;
-//	_text = t._text;
+//	type = t.type;
+//	pos = t.pos;
+//	text = t.text;
 //}

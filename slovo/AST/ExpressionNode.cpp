@@ -1,14 +1,14 @@
 #include "ExpressionNode.h"
 
-ExpressionNode::ExpressionNode(BinOperationNode* p) : _binNode(p) {};
-ExpressionNode::ExpressionNode(NumberNode* p) : _numNode(p) {};
-ExpressionNode::ExpressionNode(StatementsNode* p) : _stateNode(p) {};
-ExpressionNode::ExpressionNode(UnarOperationNode* p) : _unarNode(p) {};
-ExpressionNode::ExpressionNode(VariableNode* p) : _varNode(p) {};
-ExpressionNode::ExpressionNode(StringNode* p) : _strNode(p) {};
+ExpressionNode::ExpressionNode(BinOperationNode* p) : binNode(p) {};
+ExpressionNode::ExpressionNode(NumberNode* p) : numNode(p) {};
+ExpressionNode::ExpressionNode(StatementsNode* p) : stateNode(p) {};
+ExpressionNode::ExpressionNode(UnarOperationNode* p) : unarNode(p) {};
+ExpressionNode::ExpressionNode(VariableNode* p) : varNode(p) {};
+ExpressionNode::ExpressionNode(StringNode* p) : strNode(p) {};
 
-ExpressionNode::ExpressionNode() : _binNode(nullptr),
-								   _numNode(nullptr),
-								   _stateNode(nullptr), 
-								   _unarNode(nullptr), 
-								   _varNode(nullptr) {};
+ExpressionNode::ExpressionNode() : binNode(nullptr),
+								   numNode(nullptr),
+								   stateNode(nullptr), 
+								   unarNode(nullptr), 
+								   varNode(nullptr) {};

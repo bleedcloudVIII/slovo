@@ -1,8 +1,8 @@
 #include "StatementsNode.h"
 
-void StatementsNode::_addNode(ExpressionNode n)
+void StatementsNode::addNode(ExpressionNode n)
 {
-	_codeStrings.push_back(n);
+	codeStrings.push_back(n);
 }
 
-StatementsNode::StatementsNode() : _codeStrings({}) {};
+StatementsNode::StatementsNode() : codeStrings({}) {};

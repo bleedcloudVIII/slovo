@@ -16,20 +16,20 @@
 class Parser
 {
 public:
-	std::vector<Token> _tokens;
-	int _pos = 0;
-	std::unordered_map<std::string, std::string> _scope;
+	std::vector<Token> tokens;
+	int pos = 0;
+	std::unordered_map<std::string, std::string> scope;
 
 	Parser(std::vector<Token>);
 
-	std::variant<Token, int> _match(std::vector<TokenType>);
-	Token _require(std::vector<TokenType>);
-	ExpressionNode _parseExpression();
-	ExpressionNode _parseVariableOrNumber();
-	ExpressionNode _parseCode();
-	ExpressionNode _parseFormula();
-	ExpressionNode _parseParenthese();
-	ExpressionNode _parsePrint();
+	std::variant<Token, int> match(std::vector<TokenType>);
+	Token require(std::vector<TokenType>);
+	ExpressionNode parseExpression();
+	ExpressionNode parseVariableOrNumber();
+	ExpressionNode parseCode();
+	ExpressionNode parseFormula();
+	ExpressionNode parseParenthese();
+	ExpressionNode parsePrint();
 	//ExpressionNode _parseSkobki();
 	//std::pair<int, std::string> run(ExpressionNode* node);
 	//int run(ExpressionNode*);

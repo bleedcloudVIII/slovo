@@ -1,5 +1,5 @@
 #include "TokenType.h"
 
-TokenType::TokenType(std::string n, std::string r): _name(n), _regex(r) {};
+TokenType::TokenType(std::string n, std::string r): name(n), regex(r) {};
 
-TokenType::TokenType() : _name(""), _regex("") {};
+TokenType::TokenType() : name(""), regex("") {};

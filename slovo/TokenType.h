@@ -7,8 +7,8 @@ class TokenType
 {
 
 public:
-	std::string _name;
-	std::string _regex;
+	std::string name;
+	std::string regex;
 
 	TokenType(std::string, std::string);
 	TokenType();

@@ -8,28 +8,28 @@ std::unordered_map<std::string, TokenType*>  TokenTypeList = {
 	{"ASSIGN", new TokenType("ASSIGN", "\\=")},
 	{"NUMBER", new TokenType("NUMBER", "[0-9]*")},
 	{"SEMICOLON", new TokenType("SEMICOLON", "\\;")},
-	{"SPACE", new TokenType("SPACE", "[ \\n \\t \\r \\s]")},
+	{"SPACE", new TokenType("SPACE", "[ \\n \\t \\r]")},
 	{"PLUS", new TokenType("PLUS", "\\+")},
 	{"MINUS", new TokenType("MINUS", "\\-")},
 	{"KAVICHKI", new TokenType("KAVICHKI", "\"[a-z]*\"")},
 	{"LPAR", new TokenType("LPAR", "\\(")},
 	{"RPAR", new TokenType("RPAR", "\\)")},
-	{"UMNOJ", new TokenType("UMNOJ", "\\*")},
-	{"DELENIE", new TokenType("DELENIE", "\\/")},
+	{"UMNOJ", new TokenType("MULTIPLICATION", "\\*")},
+	{"DELENIE", new TokenType("DIVISON", "\\/")},
 };
 
-Lexer::Lexer(std::string c) : _code(c) {};
+Lexer::Lexer(std::string c) : code(c) {};
 
-Lexer::Lexer(const Lexer& l): _code(l._code), _pos(l._pos), _tokenList(l._tokenList) {}
+Lexer::Lexer(const Lexer& l): code(l.code), pos(l.pos), tokenList(l.tokenList) {}
 
-Lexer::Lexer() : _code(""), _tokenList({}) {};
+Lexer::Lexer() : code(""), tokenList({}) {};
 
 std::vector<Token> Lexer::getTokenList()
 {
-	return _tokenList;
+	return tokenList;
 }
 
-std::vector<TokenType*> _getValues()
+std::vector<TokenType*> getValues()
 {
 	std::vector<TokenType*> v;
 	for (auto e : TokenTypeList)
@@ -43,36 +43,36 @@ std::vector<Token> Lexer::lexAnalysis()
 {
 	while (this->nextToken()) {}
 	std::vector<Token> tokenListWithoutSpace;
-	for (int i = 0; i < _tokenList.size(); i++)
+	for (int i = 0; i < tokenList.size(); i++)
 	{
-		if (_tokenList[i]._type._name != "SPACE") tokenListWithoutSpace.push_back(_tokenList[i]);
+		if (tokenList[i].type.name != "SPACE") tokenListWithoutSpace.push_back(tokenList[i]);
 	}
 
-	_tokenList = tokenListWithoutSpace;
+	tokenList = tokenListWithoutSpace;
 	return tokenListWithoutSpace;
 };
 
 bool Lexer::nextToken()
 {
-	if (this->_pos >= this->_code.length()) return false;
-	const std::vector<TokenType*> tokenTypesValues = _getValues();
+	if (this->pos >= this->code.length()) return false;
+	const std::vector<TokenType*> tokenTypesValues = getValues();
 	for (int i = 0; i < tokenTypesValues.size(); i++)
 	{
 		TokenType* tokenType = tokenTypesValues[i];
-		const std::regex regex('^' + tokenType->_regex);
-		std::string _substr = _code.substr(_pos);
+		const std::regex regex('^' + tokenType->regex);
+		std::string substr = code.substr(pos);
 		std::smatch match_result;
-		std::regex_search(_substr, match_result, regex);
+		std::regex_search(substr, match_result, regex);
 		std::string result = match_result.str();
 		
 		if (match_result.length() > 0)
 		{	
-			Token token(*tokenType, result, _pos);
-			_pos += result.length();
-			_tokenList.push_back(token);
+			Token token(*tokenType, result, pos);
+			pos += result.length();
+			tokenList.push_back(token);
 			return true;
 		}
 	}
-	std::cout << "Ошибка на:" << _pos << std::endl;
-	throw "На позиции _ обнаружена ошибка!";
+	std::cout << "Ошибка на:" << pos << std::endl;
+	throw "На позиции обнаружена ошибка!";
 };

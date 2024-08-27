@@ -5,7 +5,7 @@
 class StringNode
 {
 public:
-	Token _str;
+	Token str;
 
 	StringNode(Token);
 };

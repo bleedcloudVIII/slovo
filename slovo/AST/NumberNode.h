@@ -5,7 +5,7 @@
 class NumberNode//: public ExpressionNode
 {
 public:
-	Token _number;
+	Token number;
 
 	NumberNode(Token);
 };

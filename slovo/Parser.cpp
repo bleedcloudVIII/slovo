@@ -2,37 +2,37 @@
 #include <iostream>
 #include <stack>
 
-Parser::Parser(std::vector<Token> t) : _tokens(t) {};
+Parser::Parser(std::vector<Token> t) : tokens(t) {};
 
-bool _find(std::vector<TokenType> tokenList, Token token)
+bool find(std::vector<TokenType> tokenList, Token token)
 {
 	for (int i = 0; i < tokenList.size(); i++)
-		if (tokenList[i]._name == token._type._name) return true;
+		if (tokenList[i].name == token.type.name) return true;
 	return false;
 }
 
-std::variant<Token, int> Parser::_match(std::vector<TokenType> expected)
+std::variant<Token, int> Parser::match(std::vector<TokenType> expected)
 {
-	if (_pos < _tokens.size())
+	if (pos < tokens.size())
 	{
-		const Token currentToken = _tokens[_pos];
+		const Token currentToken = tokens[pos];
 
-		if (_find(expected, currentToken))
+		if (find(expected, currentToken))
 		{
-			_pos += 1;
+			pos += 1;
 			return currentToken;
 		}
 	}
 	return -1;
 };
 
-Token Parser::_require(std::vector<TokenType> expected)
+Token Parser::require(std::vector<TokenType> expected)
 {
-	const std::variant<Token, int> token = _match(expected);
+	const std::variant<Token, int> token = match(expected);
 	if (token.index() == 1)
 	{
-		std::cout << "Error on pos " << _pos << std::endl;
-		std::cout << "Ошибка на позиции " << _pos << std::endl;
+		std::cout << "Error on pos " << pos << std::endl;
+		std::cout << "Ошибка на позиции " << pos << std::endl;
 	}
 	return std::get<Token>(token);
 };
@@ -45,18 +45,18 @@ std::string removeKavichki(std::string str)
 	return result;
 };
 
-ExpressionNode Parser::_parseVariableOrNumber()
+ExpressionNode Parser::parseVariableOrNumber()
 {
-	const std::variant<Token, int> string = _match({ *TokenTypeList["KAVICHKI"] });
+	const std::variant<Token, int> string = match({ *TokenTypeList["KAVICHKI"] });
 	if (string.index() != 1)
 	{
 		StringNode* strNode = new StringNode(std::get<Token>(string));
-		strNode->_str._text = removeKavichki(strNode->_str._text);
+		strNode->str.text = removeKavichki(strNode->str.text);
 		return ExpressionNode(strNode);
 	};
-	const std::variant<Token, int> number = _match({ *TokenTypeList["NUMBER"] });
+	const std::variant<Token, int> number = match({ *TokenTypeList["NUMBER"] });
 	if (number.index() != 1) return ExpressionNode(new NumberNode(std::get<Token>(number)));
-	const std::variant<Token, int> variable = _match({ *TokenTypeList["VARIABLE"] });
+	const std::variant<Token, int> variable = match({ *TokenTypeList["VARIABLE"] });
 	if (variable.index() != 1) return ExpressionNode(new VariableNode(std::get<Token>(variable)));
 	std::cout << "Error. Ozhidalos chislo ili peremennaya ili stroka." << std::endl;
 	std::cout << "Ошибка. Ожидалось или число, или переменная." << std::endl;
@@ -64,79 +64,79 @@ ExpressionNode Parser::_parseVariableOrNumber()
 
 }
 
-ExpressionNode Parser::_parseParenthese()
+ExpressionNode Parser::parseParenthese()
 {
-	if (_match({ *TokenTypeList["LPAR"] }).index() != 1)
+	if (match({ *TokenTypeList["LPAR"] }).index() != 1)
 	{
-		ExpressionNode node = _parseFormula();
-		_require({ *TokenTypeList["RPAR"] });
+		ExpressionNode node = parseFormula();
+		require({ *TokenTypeList["RPAR"] });
 		return node;
 	}
 	else
 	{
-		return _parseVariableOrNumber();
+		return parseVariableOrNumber();
 	}
 }
 
-ExpressionNode Parser::_parsePrint()
+ExpressionNode Parser::parsePrint()
 {
-	std::variant<Token, int> t = _match({ *TokenTypeList["LOG"]});
+	std::variant<Token, int> t = match({ *TokenTypeList["LOG"]});
 	if (t.index() != 1)
 	{
-		return ExpressionNode(new UnarOperationNode(std::get<Token>(t), _parseFormula()));
+		return ExpressionNode(new UnarOperationNode(std::get<Token>(t), parseFormula()));
 	}
 	std::cout << "ERROR." << std::endl;
 	throw "Ожидается унарный оператор log.[Ozhidalsya unarniy operator log]";
 }
 
 
-ExpressionNode Parser::_parseFormula()
+ExpressionNode Parser::parseFormula()
 {
-	ExpressionNode leftNode = _parseParenthese();
-	std::variant<Token, int> oprtr = _match({ *TokenTypeList["MINUS"], *TokenTypeList["PLUS"], *TokenTypeList["UMNOJ"], *TokenTypeList["DELENIE"] });
+	ExpressionNode leftNode = parseParenthese();
+	std::variant<Token, int> oprtr = match({ *TokenTypeList["MINUS"], *TokenTypeList["PLUS"], *TokenTypeList["UMNOJ"], *TokenTypeList["DELENIE"] });
 	while (oprtr.index() != 1)
 	{
-		const ExpressionNode rightNode = _parseParenthese();
+		const ExpressionNode rightNode = parseParenthese();
 		leftNode = ExpressionNode(new BinOperationNode(std::get<Token>(oprtr), leftNode, rightNode));
-		oprtr = _match({ *TokenTypeList["MINUS"], *TokenTypeList["PLUS"], *TokenTypeList["UMNOJ"], *TokenTypeList["DELENIE"] });
+		oprtr = match({ *TokenTypeList["MINUS"], *TokenTypeList["PLUS"], *TokenTypeList["UMNOJ"], *TokenTypeList["DELENIE"] });
 	}
 	return leftNode;
 }
 
-ExpressionNode Parser::_parseExpression()
+ExpressionNode Parser::parseExpression()
 {
 
-	const std::variant<Token, int> m = _match({ *TokenTypeList["VARIABLE"]});
+	const std::variant<Token, int> m = match({ *TokenTypeList["VARIABLE"]});
 	if (m.index() == 1)
 	{
 		// Если не переменная, то ожидаем консоль(log)
-		ExpressionNode printNode = _parsePrint();
+		ExpressionNode printNode = parsePrint();
 		return printNode;
 	}
-	_pos -= 1; // Возвращаем обратно позицию, т.к. в _match() делали + 1
-	ExpressionNode variableNode = _parseVariableOrNumber();
-	const std::variant<Token, int> assignOperator = _match({ *TokenTypeList["ASSIGN"] });
-	if (assignOperator.index() != 1) // If on _pos assign
+	pos -= 1; // Возвращаем обратно позицию, т.к. в match() делали + 1
+	ExpressionNode variableNode = parseVariableOrNumber();
+	const std::variant<Token, int> assignOperator = match({ *TokenTypeList["ASSIGN"] });
+	if (assignOperator.index() != 1) // If on pos assign
 	{
-		const ExpressionNode rightFormulaNode = _parseFormula();
+		const ExpressionNode rightFormulaNode = parseFormula();
 		BinOperationNode* binaryNode = new BinOperationNode(std::get<Token>(assignOperator), variableNode, rightFormulaNode);
 		return ExpressionNode(binaryNode);
 	}
 	std::cout << "Error. After peremennoi ozhidaetsya operator prisvoeniya." << std::endl;
-	std::cout << "Ошибка. После переменной ожидается оператор присвоения на позиции " << _pos << std::endl;
+	std::cout << "Ошибка. После переменной ожидается оператор присвоения на позиции " << pos << std::endl;
 	throw "ERROR";
 };
 
-ExpressionNode Parser::_parseCode()
+ExpressionNode Parser::parseCode()
 {
 
 	StatementsNode* root = new StatementsNode;
-	while (_pos < _tokens.size())
+	while (pos < tokens.size())
 	{
 
-		const ExpressionNode codeStringNode = _parseExpression();
-		_require({ *TokenTypeList["SEMICOLON"] });
-		root->_addNode(codeStringNode);
+		const ExpressionNode codeStringNode = parseExpression();
+		require({ *TokenTypeList["SEMICOLON"] });
+		root->addNode(codeStringNode);
 	}
 	return ExpressionNode(root);
 };
@@ -146,22 +146,22 @@ ExpressionNode Parser::_parseCode()
 
 int Parser::run(ExpressionNode* node)
 {
-	if (node->_numNode != nullptr)
+	if (node->numNode != nullptr)
 	{
- 		num_stack.push(std::stoi(node->_numNode->_number._text));
+ 		num_stack.push(std::stoi(node->numNode->number.text));
  		return 0;
 	}
-	if (node->_strNode != nullptr)
+	if (node->strNode != nullptr)
 	{
-		str_stack.push(node->_strNode->_str._text);
+		str_stack.push(node->strNode->str.text);
 		return 1;
 	}
-	if (node->_unarNode != nullptr)
+	if (node->unarNode != nullptr)
 	{
 
-		if (node->_unarNode->_operator._type._name == TokenTypeList["LOG"]->_name)
+		if (node->unarNode->_operator.type.name == TokenTypeList["LOG"]->name)
 		{
-			int result = run(new ExpressionNode(node->_unarNode->_operand));
+			int result = run(new ExpressionNode(node->unarNode->operand));
 			if (result == 0)
 			{
 				std::cout << num_stack.top() << std::endl;
@@ -179,64 +179,64 @@ int Parser::run(ExpressionNode* node)
 			return 2;
 		}
 	}
-	if (node->_binNode != nullptr)
+	if (node->binNode != nullptr)
 	{
-		if (node->_binNode->_operator._type._name == TokenTypeList["PLUS"]->_name)
+		if (node->binNode->_operator.type.name == TokenTypeList["PLUS"]->name)
 		{
-			run(new ExpressionNode(node->_binNode->_leftNode));
+			run(new ExpressionNode(node->binNode->leftNode));
 			int result = num_stack.top();
 			num_stack.pop();
-			run(new ExpressionNode(node->_binNode->_rightNode));
+			run(new ExpressionNode(node->binNode->rightNode));
 			result += num_stack.top();
 			num_stack.pop();
 			num_stack.push(result);
 			return 0;
 		}
-		else if (node->_binNode->_operator._type._name == TokenTypeList["MINUS"]->_name)
+		else if (node->binNode->_operator.type.name == TokenTypeList["MINUS"]->name)
 		{
-			run(new ExpressionNode(node->_binNode->_leftNode));
+			run(new ExpressionNode(node->binNode->leftNode));
 			int result = num_stack.top();
 			num_stack.pop();
-			run(new ExpressionNode(node->_binNode->_rightNode));
+			run(new ExpressionNode(node->binNode->rightNode));
 			result -= num_stack.top();
 			num_stack.pop();
 			num_stack.push(result);
 			return 0;
 		}
-		else if (node->_binNode->_operator._type._name == TokenTypeList["UMNOJ"]->_name)
+		else if (node->binNode->_operator.type.name == TokenTypeList["UMNOJ"]->name)
 		{
-			run(new ExpressionNode(node->_binNode->_leftNode));
+			run(new ExpressionNode(node->binNode->leftNode));
 			int result = num_stack.top();
 			num_stack.pop();
-			run(new ExpressionNode(node->_binNode->_rightNode));
+			run(new ExpressionNode(node->binNode->rightNode));
 			result *= num_stack.top();
 			num_stack.pop();
 			num_stack.push(result);
 			return 0;
 		}
-		else if (node->_binNode->_operator._type._name == TokenTypeList["DELENIE"]->_name)
+		else if (node->binNode->_operator.type.name == TokenTypeList["DELENIE"]->name)
 		{
-			run(new ExpressionNode(node->_binNode->_leftNode));
+			run(new ExpressionNode(node->binNode->leftNode));
 			int result = num_stack.top();
 			num_stack.pop();
-			run(new ExpressionNode(node->_binNode->_rightNode));
+			run(new ExpressionNode(node->binNode->rightNode));
 			result /= num_stack.top();
 			num_stack.pop();
 			num_stack.push(result);
 			return 0;
 		}
-		else if (node->_binNode->_operator._type._name == TokenTypeList["ASSIGN"]->_name)
+		else if (node->binNode->_operator.type.name == TokenTypeList["ASSIGN"]->name)
 		{
-			int result = run(new ExpressionNode(node->_binNode->_rightNode));
+			int result = run(new ExpressionNode(node->binNode->rightNode));
 			if (result == 0)
 			{
-				_scope[node->_binNode->_leftNode._varNode->_variable._text] = std::to_string(num_stack.top());
+				scope[node->binNode->leftNode.varNode->variable.text] = std::to_string(num_stack.top());
 				num_stack.pop();
 				return 2;
 			}
 			else if (result == 1)
 			{
-				_scope[node->_binNode->_leftNode._varNode->_variable._text] = str_stack.top();
+				scope[node->binNode->leftNode.varNode->variable.text] = str_stack.top();
 				str_stack.pop();
 				return 2;
 			}
@@ -247,26 +247,26 @@ int Parser::run(ExpressionNode* node)
 			return 2;
 		}
 	}
-	if (node->_varNode != nullptr)
+	if (node->varNode != nullptr)
 	{
-		if (_scope[node->_varNode->_variable._text] != "")
+		if (scope[node->varNode->variable.text] != "")
 		{
 			try {
-				int result = std::stoi(_scope[node->_varNode->_variable._text]);
+				int result = std::stoi(scope[node->varNode->variable.text]);
 				num_stack.push(result);
 				return 0;
 			}
 			catch (...)
 			{
-				str_stack.push(_scope[node->_varNode->_variable._text]);
+				str_stack.push(scope[node->varNode->variable.text]);
 				return 1;
 			}
 		}
 		else throw "Error. Peremennaya c nazvaniem ... ne obnaruzhena";
 	}
-	if (node->_stateNode != nullptr)
+	if (node->stateNode != nullptr)
 	{
-		for (ExpressionNode codeString : node->_stateNode->_codeStrings)
+		for (ExpressionNode codeString : node->stateNode->codeStrings)
 		{
 			run(new ExpressionNode(codeString));
 		};

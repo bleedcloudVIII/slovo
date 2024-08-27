@@ -9,8 +9,8 @@ class BinOperationNode//:  public ExpressionNode
 {
 public:
 	Token _operator;
-	ExpressionNode _leftNode;
-	ExpressionNode _rightNode;
+	ExpressionNode leftNode;
+	ExpressionNode rightNode;
 	//ExpressionNode _leftNode;
 	//ExpressionNode _rightNode;
 

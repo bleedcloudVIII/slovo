@@ -5,7 +5,7 @@
 class VariableNode//: public ExpressionNode
 {
 public:
-	Token _variable;
+	Token variable;
 	VariableNode(Token);
 };
 

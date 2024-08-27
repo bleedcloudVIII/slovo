@@ -1,3 +1,3 @@
 #include "NumberNode.h"
 
-NumberNode::NumberNode(Token t) :  _number(t) {};
+NumberNode::NumberNode(Token t) :  number(t) {};

@@ -6,11 +6,11 @@
 class StatementsNode//: public ExpressionNode
 {
 public:
-	std::vector<ExpressionNode> _codeStrings;
+	std::vector<ExpressionNode> codeStrings;
 
 	StatementsNode();
 
-	void _addNode(ExpressionNode);
+	void addNode(ExpressionNode);
 
 };
 

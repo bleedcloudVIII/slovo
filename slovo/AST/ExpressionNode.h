@@ -16,12 +16,12 @@ class StringNode;
 class ExpressionNode
 {
 public:
-	BinOperationNode* _binNode = nullptr;
-	NumberNode* _numNode = nullptr;
-	StatementsNode* _stateNode = nullptr;
-	UnarOperationNode* _unarNode = nullptr;
-	VariableNode* _varNode = nullptr;
-	StringNode* _strNode = nullptr;
+	BinOperationNode* binNode = nullptr;
+	NumberNode* numNode = nullptr;
+	StatementsNode* stateNode = nullptr;
+	UnarOperationNode* unarNode = nullptr;
+	VariableNode* varNode = nullptr;
+	StringNode* strNode = nullptr;
 
 	ExpressionNode(BinOperationNode*);
 	ExpressionNode(NumberNode*);

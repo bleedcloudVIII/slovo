@@ -12,9 +12,9 @@ public:
 	Lexer(const Lexer&);
 	Lexer();
 
-	std::string _code;
-	int _pos = 0;
-	std::vector<Token> _tokenList;
+	std::string code;
+	int pos = 0;
+	std::vector<Token> tokenList;
 
 	std::vector<Token> getTokenList();
 	std::vector<Token> lexAnalysis();

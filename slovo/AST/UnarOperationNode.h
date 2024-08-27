@@ -6,7 +6,7 @@ class UnarOperationNode//: public ExpressionNode
 {
 public:
 	Token _operator;
-	ExpressionNode _operand;
+	ExpressionNode operand;
 
 	UnarOperationNode(Token, ExpressionNode);
 };

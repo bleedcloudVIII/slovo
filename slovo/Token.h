@@ -6,9 +6,9 @@ class Token
 {
 
 public:
-	TokenType _type;
-	std::string _text;
-	int _pos;
+	TokenType type;
+	std::string text;
+	int pos;
 
 	Token(TokenType&, std::string, int);
 	Token(const Token&);
