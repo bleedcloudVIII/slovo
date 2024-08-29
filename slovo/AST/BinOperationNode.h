@@ -8,12 +8,12 @@
 class BinOperationNode//:  public ExpressionNode
 {
 public:
-	Token _operator;
+	char _operator;
 	ExpressionNode leftNode;
 	ExpressionNode rightNode;
-	//ExpressionNode _leftNode;
-	//ExpressionNode _rightNode;
 
-	BinOperationNode(Token, ExpressionNode, ExpressionNode);
+	BinOperationNode(char, ExpressionNode, ExpressionNode);
+
+	virtual double eval();
 };
 

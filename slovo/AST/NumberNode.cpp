@@ -1,3 +1,8 @@
 #include "NumberNode.h"
 
-NumberNode::NumberNode(Token t) :  number(t) {};
+double NumberNode::eval()
+{
+	return value;
+};
+
+NumberNode::NumberNode(double a) : value(a) {};

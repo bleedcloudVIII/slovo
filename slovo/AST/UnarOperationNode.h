@@ -5,9 +5,11 @@
 class UnarOperationNode//: public ExpressionNode
 {
 public:
-	Token _operator;
+	char _operator;
 	ExpressionNode operand;
 
-	UnarOperationNode(Token, ExpressionNode);
+	UnarOperationNode(char, ExpressionNode);
+
+	virtual double eval();
 };
 

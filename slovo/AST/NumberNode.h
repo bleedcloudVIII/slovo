@@ -6,8 +6,9 @@ class NumberNode//: public ExpressionNode
 	// Класс для Node числа
 {
 public:
-	Token number;
+	double value;
+	virtual double eval();
 
-	NumberNode(Token);
+	NumberNode(double);
 };
 

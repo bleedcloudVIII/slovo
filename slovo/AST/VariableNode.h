@@ -6,7 +6,7 @@ class VariableNode//: public ExpressionNode
 	// Класс для переменных Node
 {
 public:
-	Token variable;
-	VariableNode(Token);
+	std::string variable;
+	VariableNode(std::string);
 };
 
