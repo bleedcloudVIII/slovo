@@ -28,9 +28,11 @@ int main()
     }
 
     Lexer* lexer = new Lexer(code);
-    lexer->lexAnalysis();
-    Parser* parser = new Parser(lexer->tokenList);
-    ExpressionNode rootNode = parser->parseCode();
-    ExpressionNode* n = new ExpressionNode(rootNode);
-    parser->run(n);
+
+    std::vector<Token> list = lexer->lexAnalysis();
+    //Parser* parser = new Parser(lexer->tokenList);
+    //ExpressionNode rootNode = parser->parseCode(); // Vozvrashaet koren dereva StatementNode
+    //ExpressionNode* n = new ExpressionNode(rootNode);
+    //parser->run(n);
+    return 0;
 }

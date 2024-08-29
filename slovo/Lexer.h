@@ -1,7 +1,6 @@
 #pragma once
 
 #include "Token.h"
-#include "TokenType.h"
 #include <string>
 #include <vector>
 
@@ -12,12 +11,19 @@ public:
 	Lexer(const Lexer&);
 	Lexer();
 
-	std::string code;
-	int pos = 0;
-	std::vector<Token> tokenList;
+	std::string code; // Stroka koda
+	int pos = 0; // Tekushee pozicia pri analize
+	int length = code.length(); // Dlina stroki koda
+	std::vector<Token> tokenList; // Spisok tokenov
+	std::string operators = "-+=*/();";
 
-	std::vector<Token> getTokenList();
+
 	std::vector<Token> lexAnalysis();
+
+	void tokenizeNumber();
+	void tokenizeOperator();
+	void tokenizeWord();
+
 	bool nextToken();
 };
 

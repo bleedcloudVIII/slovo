@@ -140,7 +140,6 @@
     <ClCompile Include="Parser.cpp" />
     <ClCompile Include="slovo.cpp" />
     <ClCompile Include="Token.cpp" />
-    <ClCompile Include="TokenType.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AST\BinOperationNode.h" />
@@ -153,7 +152,6 @@
     <ClInclude Include="Lexer.h" />
     <ClInclude Include="Parser.h" />
     <ClInclude Include="Token.h" />
-    <ClInclude Include="TokenType.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

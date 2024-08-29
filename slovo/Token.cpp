@@ -1,19 +1,8 @@
 #include "Token.h"
 
-Token::Token(TokenType& t, std::string txt, int p) : type(t), text(txt), pos(p) {};
+Token::Token(TokenType t, std::string txt) : type(t), text(txt) {};
 
-Token::Token(const Token& t) : type(t.type), text(t.text), pos(t.pos) {};
-
-Token::Token() : text(""), pos(-1)
-{
-	TokenType a;
-	type = a;
-};
-
-std::string Token::getText()
-{
-	return text;
-}
+Token::Token(const Token& t) : type(t.type), text(t.text) {};
 
 //void Token::operator=(Token t)
 //{
