@@ -14,6 +14,6 @@ public:
 
 	BinOperationNode(char, ExpressionNode, ExpressionNode);
 
-	virtual double eval();
+	double getValue();
 };
 

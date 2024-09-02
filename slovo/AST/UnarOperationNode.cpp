@@ -2,11 +2,11 @@
 
 UnarOperationNode::UnarOperationNode(char oprtr, ExpressionNode oprnd) : _operator(oprtr), operand(oprnd) {};
 
-double UnarOperationNode::eval()
+double UnarOperationNode::getValue()
 {
 	switch (_operator)
 	{
-		case '-': return -operand.eval();
-		case '+': return operand.eval();
+		case '-': return -operand.getValue();
+		case '+': return operand.getValue();
 	}
 }
