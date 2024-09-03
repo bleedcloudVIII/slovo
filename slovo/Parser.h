@@ -24,6 +24,5 @@ public:
 	Parser(std::vector<Token>);
 
 	void parseTokensToAst();
-
 };
 

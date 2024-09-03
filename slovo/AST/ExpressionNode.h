@@ -10,7 +10,7 @@ class ExpressionNode // Корневой класс для всех Node
 {
 public:
 	
-	virtual double getValue();
+	virtual double calculate();
 	virtual ~ExpressionNode();
 };
 

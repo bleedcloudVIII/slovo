@@ -14,6 +14,6 @@ public:
 
 	BinOperationNode(char, ExpressionNode, ExpressionNode);
 
-	double getValue();
+	double calculate();
 };
 

@@ -18,7 +18,7 @@ Statement* Parser::parseStatement()
 	if (posOfAssign != -1)
 	{
 		BinOperationNode* bin = new BinOperationNode();
-		bin.
+		
 
 	}
 	else

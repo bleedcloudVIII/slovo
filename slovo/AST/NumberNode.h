@@ -7,7 +7,7 @@ class NumberNode//: public ExpressionNode
 {
 public:
 	double value;
-	double getValue();
+	double calculate();
 
 	NumberNode(double);
 };

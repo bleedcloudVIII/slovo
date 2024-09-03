@@ -1,6 +1,6 @@
 #include "NumberNode.h"
 
-double NumberNode::getValue()
+double NumberNode::calculate()
 {
 	return value;
 };

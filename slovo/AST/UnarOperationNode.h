@@ -10,6 +10,6 @@ public:
 
 	UnarOperationNode(char, ExpressionNode);
 
-	double getValue();
+	double calculate();
 };
 

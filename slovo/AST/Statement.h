@@ -4,6 +4,7 @@
 class Statement
 {
 public:
-	ExpressionNode* rootOfStatement;
-	Statement* nextStatemnt;
+	/*ExpressionNode* rootOfStatement;
+	Statement* nextStatemnt;*/
+	virtual void execute();
 };
