@@ -14,7 +14,11 @@
 class Parser
 {
 private:
-	Statement* parseStatement();
+	Statement parseStatement();
+	bool match(TokenType);
+	ExpressionNode expression();
+	ExpressionNode additive();
+	ExpressionNode multiplication();
 public:
 	std::vector<Token> tokens;
 	int length;

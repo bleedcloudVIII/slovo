@@ -5,7 +5,22 @@
 
 Parser::Parser(std::vector<Token> tokens) : tokens(tokens), length(tokens.size()) {};
 
-Statement* Parser::parseStatement()
+bool Parser::match(TokenType tt) // MB NE NUZHNO
+{
+	return tokens[pos++].type == tt;
+}
+
+ExpressionNode Parser::additive()
+{
+	ExpressionNode result = multiplication();
+};
+
+ExpressionNode Parser::expression()
+{
+	return additive();
+};
+
+Statement Parser::parseStatement()
 {
 	std::vector<Token> tokensOfCurrentStatement;
 	while (tokens[pos].type != TokenType::SEMICOLON) tokensOfCurrentStatement.push_back(tokens[pos]);
@@ -17,9 +32,13 @@ Statement* Parser::parseStatement()
 
 	if (posOfAssign != -1)
 	{
-		BinOperationNode* bin = new BinOperationNode();
-		
-
+		if (tokensOfCurrentStatement[0].type == TokenType::VARIABLE)
+		{
+			pos++; // Chtobi yuti ot nazvaniya peremennoi
+			pos++; //Chtobi yuti ot "="
+			AssignStatement statement(tokensOfCurrentStatement[0].text, expression());
+		}
+		else throw "Error in statement ASSIGN";
 	}
 	else
 	{
@@ -29,11 +48,12 @@ Statement* Parser::parseStatement()
 
 void Parser::parseTokensToAst()
 {
-	Statement* current;
+	std::vector<Statement> statements {};
 	while (pos < length)
 	{
-		Statement* statement = parseStatement();
-		if (pos == 0)
+		Statement statement = parseStatement();
+		statements.push_back(statement);
+		/*if (pos == 0)
 		{
 			rootStatemnt = statement;
 			current = statement;
@@ -42,6 +62,6 @@ void Parser::parseTokensToAst()
 		{
 			current->nextStatemnt = statement;
 			current = statement;
-		}
+		}*/
 	}
 };
