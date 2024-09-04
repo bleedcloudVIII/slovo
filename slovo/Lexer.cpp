@@ -44,7 +44,7 @@ void Lexer::tokenizeOperator()
 		operatorStr += code[pos];
 		pos++;
 	}
-	
+	// BUG: ERROR WHEN HAVE ");" in code and (( )) 
 	if (operatorStr == "+") tokenList.push_back(Token(TokenType::PLUS, operatorStr));
 	else if (operatorStr == "-") tokenList.push_back(Token(TokenType::MINUS, operatorStr));
 	else if (operatorStr == "=") tokenList.push_back(Token(TokenType::ASSIGN, operatorStr));

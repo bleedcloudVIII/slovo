@@ -19,6 +19,7 @@ private:
 	Statement parseStatement();
 	bool match(TokenType);
 	double expression();
+	double calculateExpression(std::vector<NumberNode>&, std::vector<char>&);
 	bool isCurrentTokenOperator();
 	
 public:

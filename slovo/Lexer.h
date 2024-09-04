@@ -15,7 +15,7 @@ public:
 	int pos = 0; // Tekushee pozicia pri analize
 	int length = code.length(); // Dlina stroki koda
 	std::vector<Token> tokenList; // Spisok tokenov
-	std::string operators = "-+=*/();";
+	std::string operators = "()-+=*/;";
 
 
 	std::vector<Token> lexAnalysis();
