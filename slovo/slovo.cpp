@@ -34,5 +34,7 @@ int main()
     //ExpressionNode rootNode = parser->parseCode(); // Vozvrashaet koren dereva StatementNode
     //ExpressionNode* n = new ExpressionNode(rootNode);
     //parser->run(n);
+    Parser p = Parser(list);
+    p.parseTokensToAst();
     return 0;
 }

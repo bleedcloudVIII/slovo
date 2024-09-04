@@ -8,22 +8,66 @@ Parser::Parser(std::vector<Token> tokens) : tokens(tokens), length(tokens.size()
 bool Parser::match(TokenType tt) // MB NE NUZHNO
 {
 	return tokens[pos++].type == tt;
-}
-
-ExpressionNode Parser::additive()
-{
-	ExpressionNode result = multiplication();
 };
 
-ExpressionNode Parser::expression()
+bool Parser::isCurrentTokenOperator()
 {
-	return additive();
+	return tokens[pos].type == TokenType::DIVISON or
+		tokens[pos].type == TokenType::MINUS or
+		tokens[pos].type == TokenType::PLUS or
+		tokens[pos].type == TokenType::MULTIPLICATION;
+};
+
+double Parser::expression()
+{
+	std::stack<NumberNode> numbers;
+	std::stack<char> operators;
+
+	while (tokens[pos].type != TokenType::SEMICOLON)
+	{
+		if (tokens[pos].type == TokenType::NUMBER) numbers.push(NumberNode(stod(tokens[pos].text)));
+		else if (tokens[pos].type == TokenType::VARIABLE) numbers.push(codesVariables[tokens[pos].text]);
+		else if (isCurrentTokenOperator()) operators.push(tokens[pos].text[0]);
+		else {} // ?
+
+		pos++;
+	}
+	pos++; // Chtobi yiti ot ;
+	// Poka tolko binarnie operatori
+
+	BinOperationNode tmp;
+	int count = operators.size();
+	for (int i = count; i > 0; i--)
+	{
+		if (i == count)
+		{
+			
+			NumberNode _tmp = numbers.top();
+			numbers.pop();
+			tmp = BinOperationNode(operators.top(), _tmp, numbers.top());
+			numbers.pop();
+		}
+		else
+		{
+			tmp = BinOperationNode(operators.top(), numbers.top(), tmp.calculate());
+			numbers.pop();
+			
+		}
+
+		operators.pop();
+	}
+	return tmp.calculate();
 };
 
 Statement Parser::parseStatement()
 {
 	std::vector<Token> tokensOfCurrentStatement;
-	while (tokens[pos].type != TokenType::SEMICOLON) tokensOfCurrentStatement.push_back(tokens[pos]);
+	int _pos = pos;
+	while (tokens[_pos].type != TokenType::SEMICOLON)
+	{
+		tokensOfCurrentStatement.push_back(tokens[_pos]);
+		_pos++;
+	}
 
 	int posOfAssign = -1;
 
@@ -36,7 +80,8 @@ Statement Parser::parseStatement()
 		{
 			pos++; // Chtobi yuti ot nazvaniya peremennoi
 			pos++; //Chtobi yuti ot "="
-			AssignStatement statement(tokensOfCurrentStatement[0].text, expression());
+			//AssignStatement statement(tokensOfCurrentStatement[0].text, expression());
+			codesVariables[tokensOfCurrentStatement[0].text] = expression();
 		}
 		else throw "Error in statement ASSIGN";
 	}
@@ -64,4 +109,6 @@ void Parser::parseTokensToAst()
 			current = statement;
 		}*/
 	}
+	double d = codesVariables["a"];
+	std::cout << "end\n";
 };

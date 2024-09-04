@@ -10,15 +10,17 @@
 #include "AST/BinOperationNode.h"
 #include "AST/UnarOperationNode.h"
 #include "AST/Statement.h"
+#include <stack>
+#include "AST/AssignStatement.h"
 
 class Parser
 {
 private:
 	Statement parseStatement();
 	bool match(TokenType);
-	ExpressionNode expression();
-	ExpressionNode additive();
-	ExpressionNode multiplication();
+	double expression();
+	bool isCurrentTokenOperator();
+	
 public:
 	std::vector<Token> tokens;
 	int length;

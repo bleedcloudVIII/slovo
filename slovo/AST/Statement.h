@@ -7,4 +7,5 @@ public:
 	/*ExpressionNode* rootOfStatement;
 	Statement* nextStatemnt;*/
 	virtual void execute();
+	virtual ~Statement();
 };

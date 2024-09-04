@@ -10,10 +10,11 @@ class AssignStatement
 public:
 
 	std::string variable;
-	ExpressionNode expression;
+	double expression;
 
 	void execute();
 
 	AssignStatement(std::string, ExpressionNode);
+	AssignStatement(std::string, double);
 };
 
