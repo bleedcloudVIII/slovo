@@ -17,16 +17,37 @@ double Parser::calculateExpression(std::vector<NumberNode>& numbers, std::vector
 	while (std::find(operators.begin(), operators.end(), '(') != operators.end() or std::find(operators.begin(), operators.end(), ')') != operators.end())
 	{
 		auto start = std::find(operators.begin(), operators.end(), '(');
-		
-		//std::vector<char> copy_vec;
-		//copy(operators.begin(), operators.end(), std::back_inserter(copy_vec));
-		//std::reverse(copy_vec.begin(), copy_vec.end());
-
 		auto end = std::find(operators.begin(), operators.end(), ')');
 
 		int start_index = start - operators.begin();
-		//int end_index = copy_vec.size() - (end - copy_vec.begin()) - 1;
 		int end_index = end - operators.begin();
+
+		if (std::find(operators.begin() + start_index + 1, operators.begin() + end_index - 1, '(') != operators.end() or std::find(operators.begin() + start_index + 1, operators.begin() + end_index - 1, ')') != operators.end())
+		{
+			// Skobki v skobkah
+			// Veroyatnei vsego end oborval skobku
+			end = std::find(operators.begin() + start_index + 1, operators.begin() + end_index - 1, ')');
+			if (end != operators.begin())
+			{
+				int start_index = start - operators.begin();
+				int end_index = end - operators.begin();
+
+				std::vector<NumberNode> n;
+				std::vector<char> o;
+				
+				for (int i = start_index + 1; i <= end_index; i++) n.push_back(numbers[i]);
+				for (int i = start_index + 1; i <= end_index - 1; i++) o.push_back(operators[i]);
+
+				double resultOfPars = calculateExpression(n, o);
+
+				for (int i = 0; i <= end_index - start_index; i++) numbers.erase(numbers.begin() + start_index);
+				for (int i = 0; i <= end_index - start_index; i++) operators.erase(operators.begin() + start_index);
+				numbers[start_index] = resultOfPars;
+			}
+			else throw "ERROR !@#!";
+		}
+
+
 
 		// NOTE: Sdelat proverku na vtoruy skobru
 		// ... = 5 + (5 * 4 - 6) - 3
@@ -79,8 +100,6 @@ double Parser::calculateExpression(std::vector<NumberNode>& numbers, std::vector
 		else tmp = BinOperationNode(operators[i], numbers[i], tmp.calculate());
 	}
 	return tmp.calculate();
-	
-	//return calculateExpression(numbers, operators); // Popadyot suda posle togo kak poschitayutsya vse skobki
 };
 
 bool Parser::isCurrentTokenOperator()
@@ -111,7 +130,6 @@ double Parser::expression()
 		{
 			operators.push_back(tokens[pos].text[0]);
 			numbers.push_back(NULL); // Chtobi skobka bila s 0
-			//numbers.push_back(NULL); // Vmesto etogo 0 budet podstavleno znachenie skobki
 		}
 
 		else {} // ?
