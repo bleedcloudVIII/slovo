@@ -20,41 +20,58 @@ bool Parser::isCurrentTokenOperator()
 
 double Parser::expression()
 {
-	std::stack<NumberNode> numbers;
-	std::stack<char> operators;
+	//std::stack<NumberNode> numbers;
+	//std::stack<char> operators;
+
+	std::vector<NumberNode> numbers;
+	std::vector<char> operators;
+
 
 	while (tokens[pos].type != TokenType::SEMICOLON)
 	{
-		if (tokens[pos].type == TokenType::NUMBER) numbers.push(NumberNode(stod(tokens[pos].text)));
-		else if (tokens[pos].type == TokenType::VARIABLE) numbers.push(codesVariables[tokens[pos].text]);
-		else if (isCurrentTokenOperator()) operators.push(tokens[pos].text[0]);
+		if (tokens[pos].type == TokenType::NUMBER) numbers.push_back(NumberNode(stod(tokens[pos].text)));
+		else if (tokens[pos].type == TokenType::VARIABLE) numbers.push_back(codesVariables[tokens[pos].text]);
+		else if (isCurrentTokenOperator()) operators.push_back(tokens[pos].text[0]);
 		else {} // ?
 
 		pos++;
 	}
 	pos++; // Chtobi yiti ot ;
-	// Poka tolko binarnie operatori
+	
+	for (int i = 0; i < operators.size(); i++)
+	{ 
+		if (operators[i] == '*')
+		{
+			numbers[i] = NumberNode(BinOperationNode('*', numbers[i], numbers[i + 1]).calculate());
+			numbers.erase(numbers.begin() + i + 1);
+			operators.erase(operators.begin() + i);
+		}
+		else if (operators[i] == '/')
+		{
+			numbers[i] = NumberNode(BinOperationNode('/', numbers[i], numbers[i + 1]).calculate());
+			numbers.erase(numbers.begin() + i + 1);
+			operators.erase(operators.begin() + i);
+		}
+	}
+
+	if (operators.size() == 0)
+	{
+		// Znacit bilo tolko delenie ili umnozenie
+		return numbers[0].calculate();
+	}
 
 	BinOperationNode tmp;
-	int count = operators.size();
-	for (int i = count; i > 0; i--)
+	
+	for (int i = operators.size() - 1; i >= 0; i--)
 	{
-		if (i == count)
+		if (i == operators.size() - 1)
 		{
-			
-			NumberNode _tmp = numbers.top();
-			numbers.pop();
-			tmp = BinOperationNode(operators.top(), _tmp, numbers.top());
-			numbers.pop();
+			tmp = BinOperationNode(operators[i], numbers[i], numbers[i + 1]);
 		}
 		else
 		{
-			tmp = BinOperationNode(operators.top(), numbers.top(), tmp.calculate());
-			numbers.pop();
-			
+			tmp = BinOperationNode(operators[i], numbers[i], tmp.calculate());
 		}
-
-		operators.pop();
 	}
 	return tmp.calculate();
 };
@@ -78,9 +95,8 @@ Statement Parser::parseStatement()
 	{
 		if (tokensOfCurrentStatement[0].type == TokenType::VARIABLE)
 		{
-			pos++; // Chtobi yuti ot nazvaniya peremennoi
-			pos++; //Chtobi yuti ot "="
-			//AssignStatement statement(tokensOfCurrentStatement[0].text, expression());
+			pos += 2; // Chtobi yuti ot nazvaniya peremennoi i "="
+			
 			codesVariables[tokensOfCurrentStatement[0].text] = expression();
 		}
 		else throw "Error in statement ASSIGN";
