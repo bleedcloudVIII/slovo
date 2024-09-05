@@ -56,16 +56,18 @@ double Parser::calculateExpressionWithPars(std::vector<NumberNode> numbers, std:
 		int start_index = start - operators.begin();
 		int end_index = end - operators.begin();
 
-		std::vector<char>::iterator begin_itr(operators.begin() + end_index + 1);
-		std::vector<char>::iterator end_itr(operators.end());
+		std::vector<char>::iterator begin_itr(operators.begin() + start_index + 1);
+		std::vector<char>::iterator end_itr(operators.begin() + end_index - 1);		 
+		std::vector<char>::iterator begin_itr_find(operators.begin() + end_index + 1);
+		std::vector<char>::iterator end_itr_find(operators.end());
 		// TO DO: IF pomenyat na while i izmenyat iteratori
 		if (std::find(begin_itr, end_itr, ')') != end_itr or std::find(begin_itr, end_itr, '(') != end_itr)
 		{
 			//	// Skobki v skobkah
 			//	// Veroyatnei vsego end oborval skobku
 			
-			auto new_end = std::find(begin_itr, end_itr, ')');
-			if (new_end != end_itr)
+			auto new_end = std::find(begin_itr_find, end_itr_find, ')');
+			if (new_end != end_itr_find)
 			{
 
 				int begin_index = start - operators.begin();
@@ -83,7 +85,7 @@ double Parser::calculateExpressionWithPars(std::vector<NumberNode> numbers, std:
 				for (int i = 0; i <= end_index - start_index; i++) operators.erase(operators.begin() + start_index);
 				numbers[start_index] = resultOfExpression;
 			}
-			else throw "ERROR IN PARSER PARS";
+			else throw "ERROR IN PARSER PARS"; // BUG s neskolkimi strokami v virazhenii (no bez skobok v skobkah)
 		}
 		
 		
