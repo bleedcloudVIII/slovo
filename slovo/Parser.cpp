@@ -61,8 +61,6 @@ double Parser::calculateExpressionWithPars(std::vector<NumberNode> numbers, std:
 		std::vector<char>::iterator end_itr_find(operators.end());
 		std::vector<char>::iterator new_end;
 		bool flag = 0;
-		// TO DO: IF pomenyat na while i izmenyat iteratori
-		//if (std::find(begin_itr, end_itr, ')') != end_itr or std::find(begin_itr, end_itr, '(') != end_itr)
 		while (std::find(begin_itr, end_itr, ')') != end_itr or std::find(begin_itr, end_itr, '(') != end_itr)
 		{
 			new_end = std::find(begin_itr_find, end_itr_find, ')');

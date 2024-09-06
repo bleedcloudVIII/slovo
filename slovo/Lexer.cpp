@@ -36,15 +36,8 @@ void Lexer::tokenizeNumber()
 	tokenList.push_back(Token(TokenType::NUMBER, numberStr));
 };
 
-void Lexer::tokenizeOperator()
+void Lexer::findEqual(std::string operatorStr)
 {
-	std::string operatorStr = "";
-	while (operators.find(code[pos]) != std::string::npos)
-	{
-		operatorStr += code[pos];
-		pos++;
-	}
-	// BUG: ERROR WHEN HAVE ");" in code and (( )) 
 	if (operatorStr == "+") tokenList.push_back(Token(TokenType::PLUS, operatorStr));
 	else if (operatorStr == "-") tokenList.push_back(Token(TokenType::MINUS, operatorStr));
 	else if (operatorStr == "=") tokenList.push_back(Token(TokenType::ASSIGN, operatorStr));
@@ -53,7 +46,27 @@ void Lexer::tokenizeOperator()
 	else if (operatorStr == "*") tokenList.push_back(Token(TokenType::MULTIPLICATION, operatorStr));
 	else if (operatorStr == "/") tokenList.push_back(Token(TokenType::DIVISON, operatorStr));
 	else if (operatorStr == ";") tokenList.push_back(Token(TokenType::SEMICOLON, operatorStr));
-	else throw "Error on tokenizeOperator!";
+	else
+	{
+
+		for (int i = 0; i < operatorStr.size(); i++)
+		{
+			std::string str = "";
+			str += operatorStr[i];
+			this->findEqual(str);
+		}
+	}
+};
+
+void Lexer::tokenizeOperator()
+{
+	std::string operatorStr = "";
+	while (operators.find(code[pos]) != std::string::npos)
+	{
+		operatorStr += code[pos];
+		pos++;
+	}
+	this->findEqual(operatorStr);
 };
 
 // WORD is

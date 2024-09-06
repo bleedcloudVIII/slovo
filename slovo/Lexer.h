@@ -6,6 +6,12 @@
 
 class Lexer
 {
+private:
+	void tokenizeNumber();
+	void tokenizeOperator();
+	void tokenizeWord();
+	void findEqual(std::string);
+	bool nextToken();
 public:
 	Lexer(std::string);
 	Lexer(const Lexer&);
@@ -19,11 +25,5 @@ public:
 
 
 	std::vector<Token> lexAnalysis();
-
-	void tokenizeNumber();
-	void tokenizeOperator();
-	void tokenizeWord();
-
-	bool nextToken();
 };
 
