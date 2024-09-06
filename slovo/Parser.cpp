@@ -47,7 +47,6 @@ double Parser::calculateExpression(std::vector<NumberNode>& numbers, std::vector
 
 double Parser::calculateExpressionWithPars(std::vector<NumberNode> numbers, std::vector<char> operators)
 {
-	// TO DO: Sdelat chto-bi rebotalo so skobkami v skobkah
 	while (std::find(operators.begin(), operators.end(), '(') != operators.end() or std::find(operators.begin(), operators.end(), ')') != operators.end())
 	{
 		auto start = std::find(operators.begin(), operators.end(), '(');
@@ -60,37 +59,41 @@ double Parser::calculateExpressionWithPars(std::vector<NumberNode> numbers, std:
 		std::vector<char>::iterator end_itr(operators.begin() + end_index - 1);		 
 		std::vector<char>::iterator begin_itr_find(operators.begin() + end_index + 1);
 		std::vector<char>::iterator end_itr_find(operators.end());
+		std::vector<char>::iterator new_end;
+		bool flag = 0;
 		// TO DO: IF pomenyat na while i izmenyat iteratori
-		if (std::find(begin_itr, end_itr, ')') != end_itr or std::find(begin_itr, end_itr, '(') != end_itr)
+		//if (std::find(begin_itr, end_itr, ')') != end_itr or std::find(begin_itr, end_itr, '(') != end_itr)
+		while (std::find(begin_itr, end_itr, ')') != end_itr or std::find(begin_itr, end_itr, '(') != end_itr)
 		{
-			//	// Skobki v skobkah
-			//	// Veroyatnei vsego end oborval skobku
+			new_end = std::find(begin_itr_find, end_itr_find, ')');
+			auto diff = std::find(begin_itr, end_itr, '(');
+			begin_itr = diff + 1;
 			
-			auto new_end = std::find(begin_itr_find, end_itr_find, ')');
-			if (new_end != end_itr_find)
-			{
+			begin_itr_find = new_end + 1;
 
-				int begin_index = start - operators.begin();
-				int end_index = new_end - operators.begin();
-
-				std::vector<NumberNode> n;
-				std::vector<char> o;
-
-				std::copy(numbers.begin() + begin_index + 1, numbers.begin() + end_index + 1, std::back_inserter(n));
-				std::copy(operators.begin() + begin_index + 1, operators.begin() + end_index, std::back_inserter(o));
-
-				double resultOfExpression = calculateExpressionWithPars(n, o);
-
-				for (int i = 0; i <= end_index - start_index; i++) numbers.erase(numbers.begin() + start_index);
-				for (int i = 0; i <= end_index - start_index; i++) operators.erase(operators.begin() + start_index);
-				numbers[start_index] = resultOfExpression;
-			}
-			else throw "ERROR IN PARSER PARS"; // BUG s neskolkimi strokami v virazhenii (no bez skobok v skobkah)
+			if (new_end != end_itr_find) flag = 1;
 		}
 		
-		
+		if (flag)
+		{
 
-		// NOTE: Sdelat proverku na vtoruy skobru
+			int begin_index = start - operators.begin();
+			int end_index = new_end - operators.begin();
+
+			std::vector<NumberNode> n;
+			std::vector<char> o;
+
+			std::copy(numbers.begin() + begin_index + 1, numbers.begin() + end_index + 1, std::back_inserter(n));
+			std::copy(operators.begin() + begin_index + 1, operators.begin() + end_index, std::back_inserter(o));
+
+			double resultOfExpression = calculateExpressionWithPars(n, o);
+
+			for (int i = 0; i <= end_index - start_index; i++) numbers.erase(numbers.begin() + start_index);
+			for (int i = 0; i <= end_index - start_index; i++) operators.erase(operators.begin() + start_index);
+			numbers[start_index] = resultOfExpression;
+		}
+
+
 		// ... = 5 + (5 * 4 - 6) - 3
 		// num | oper | i
 		// 5     +      0
@@ -104,23 +107,22 @@ double Parser::calculateExpressionWithPars(std::vector<NumberNode> numbers, std:
 		std::vector<NumberNode> n;
 		std::vector<char> o;
 
-		//for (int i = start_index + 1; i <= end_index; i++) n.push_back(numbers[i]);
-		//for (int i = start_index + 1; i <= end_index - 1; i++) o.push_back(operators[i]);
-
 		auto nbegin = std::find(operators.begin(), operators.end(), '(');
 		auto nend = std::find(operators.begin(), operators.end(), ')');
 
-		std::copy(numbers.begin() + (nbegin - operators.begin()) + 1, numbers.begin() + (nend - operators.begin()) + 1, std::back_inserter(n));
-		std::copy(operators.begin() + (nbegin - operators.begin()) + 1, operators.begin() + (nend - operators.begin()), std::back_inserter(o));
+		if (nbegin != operators.end() and nend != operators.end())
+		{
+			std::copy(numbers.begin() + (nbegin - operators.begin()) + 1, numbers.begin() + (nend - operators.begin()) + 1, std::back_inserter(n));
+			std::copy(operators.begin() + (nbegin - operators.begin()) + 1, operators.begin() + (nend - operators.begin()), std::back_inserter(o));
 
-		double resultOfPars = calculateExpressionWithPars(n, o);
+			double resultOfPars = calculateExpressionWithPars(n, o);
+			end_index = nend - operators.begin();
+			start_index = nbegin - operators.begin();
 
-		end_index = nend - operators.begin();
-		start_index = nbegin - operators.begin();
-
-		for (int i = 0; i <= end_index - start_index; i++) numbers.erase(numbers.begin() + start_index);
-		for (int i = 0; i <= end_index - start_index; i++) operators.erase(operators.begin() + start_index);
-		numbers[start_index] = resultOfPars;
+			for (int i = 0; i <= end_index - start_index; i++) numbers.erase(numbers.begin() + start_index);
+			for (int i = 0; i <= end_index - start_index; i++) operators.erase(operators.begin() + start_index);
+			numbers[start_index] = resultOfPars;
+		}
 	}
 	return calculateExpression(numbers, operators);
 };
